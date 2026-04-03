@@ -42,3 +42,11 @@ export type ClientContentLog = {
   turns: Part[];
   turnComplete: boolean;
 };
+
+export type UpiPayload = {
+  upiId: string;
+  payeeName: string;
+  amount?: string;
+  note?: string;
+  raw: string;
+};

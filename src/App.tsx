@@ -22,6 +22,10 @@ import { Altair } from "./components/altair/Altair";
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 import { LiveClientOptions } from "./types";
+import { useUpiQrScanner } from "./hooks/useUpiQrScanner";
+import { usePaymentStore } from "./store/paymentStore";
+import { PaymentConfirmOverlay } from "./components/PaymentConfirmOverlay";
+import { speakText } from "./utils/speakText";
 
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
 if (typeof API_KEY !== "string") {
@@ -38,6 +42,20 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   // either the screen capture, the video or null, if null we hide it
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+
+  const { upiMode, scannedPayload, setScannedPayload, setUpiMode, reset } = usePaymentStore();
+
+  useUpiQrScanner({
+    videoRef,
+    enabled: upiMode,
+    onDetected: (payload) => {
+      setScannedPayload(payload);
+      speakText(`UPI QR detected. Pay ${payload.payeeName} at ${payload.upiId}${payload.amount ? `, amount rupees ${payload.amount}` : ''}. Confirm or cancel.`);
+    },
+    onError: (err) => console.error('QR Scanner error:', err),
+  });
+
+  // handleConfirmPayment handled in overlay
 
   return (
     <div className="App">
@@ -56,6 +74,9 @@ function App() {
                 autoPlay
                 playsInline
               />
+              {scannedPayload && (
+                <PaymentConfirmOverlay payload={scannedPayload} />
+              )}
             </div>
 
             <ControlTray
