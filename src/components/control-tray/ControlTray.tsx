@@ -128,7 +128,9 @@ function ControlTray({
 
   useEffect(() => {
     const onData = (base64: string) => {
-      if (isMicActiveRef.current) {
+      // Check refs directly for most up-to-date values (avoids async useEffect timing issues)
+      const isActive = !mutedRef.current || pushToTalkActiveRef.current;
+      if (isActive) {
         client.sendRealtimeInput([
           {
             mimeType: "audio/pcm;rate=16000",
@@ -138,7 +140,8 @@ function ControlTray({
       }
     };
     const onVolume = (vol: number) => {
-      if (isMicActiveRef.current) {
+      const isActive = !mutedRef.current || pushToTalkActiveRef.current;
+      if (isActive) {
         setInVolume(vol);
       } else {
         setInVolume(0);
