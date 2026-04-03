@@ -71,9 +71,19 @@ function ControlTray({
   const [webcam, screenCapture] = videoStreams;
   const [inVolume, setInVolume] = useState(0);
   const [audioRecorder] = useState(() => new AudioRecorder());
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [pushToTalkActive, setPushToTalkActive] = useState(false);
+  const isMicActive = !muted || pushToTalkActive;
+  
+  // Use separate refs for muted and pushToTalkActive to avoid async useEffect timing issues
+  const mutedRef = useRef(muted);
+  const pushToTalkActiveRef = useRef(pushToTalkActive);
   const renderCanvasRef = useRef<HTMLCanvasElement>(null);
   const connectButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Update refs synchronously (not in useEffect) to ensure audio gating uses current values
+  mutedRef.current = muted;
+  pushToTalkActiveRef.current = pushToTalkActive;
 
   const { client, connected, connect, disconnect, volume } =
     useLiveAPIContext();
@@ -91,23 +101,60 @@ function ControlTray({
   }, [inVolume]);
 
   useEffect(() => {
-    const onData = (base64: string) => {
-      client.sendRealtimeInput([
-        {
-          mimeType: "audio/pcm;rate=16000",
-          data: base64,
-        },
-      ]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore key repeat events to prevent spurious state updates
+      if (e.repeat) return;
+      
+      const target = e.target as HTMLElement;
+      if (e.code === "Space" && target.tagName !== "INPUT" && target.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        setPushToTalkActive(true);
+      }
     };
-    if (connected && !muted && audioRecorder) {
-      audioRecorder.on("data", onData).on("volume", setInVolume).start();
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        setPushToTalkActive(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onData = (base64: string) => {
+      if (isMicActiveRef.current) {
+        client.sendRealtimeInput([
+          {
+            mimeType: "audio/pcm;rate=16000",
+            data: base64,
+          },
+        ]);
+      }
+    };
+    const onVolume = (vol: number) => {
+      if (isMicActiveRef.current) {
+        setInVolume(vol);
+      } else {
+        setInVolume(0);
+      }
+    };
+
+    if (connected && audioRecorder) {
+      audioRecorder.on("data", onData).on("volume", onVolume).start();
     } else {
       audioRecorder.stop();
+      setInVolume(0);
     }
     return () => {
-      audioRecorder.off("data", onData).off("volume", setInVolume);
+      audioRecorder.off("data", onData).off("volume", onVolume);
     };
-  }, [connected, client, muted, audioRecorder]);
+  }, [connected, client, audioRecorder]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -167,7 +214,7 @@ function ControlTray({
           className={cn("action-button mic-button")}
           onClick={() => setMuted(!muted)}
         >
-          {!muted ? (
+          {isMicActive ? (
             <span className="material-symbols-outlined filled">mic</span>
           ) : (
             <span className="material-symbols-outlined filled">mic_off</span>
