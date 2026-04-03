@@ -23,6 +23,7 @@ import { useScreenCapture } from "../../hooks/use-screen-capture";
 import { useWebcam } from "../../hooks/use-webcam";
 import { AudioRecorder } from "../../lib/audio-recorder";
 import AudioPulse from "../audio-pulse/AudioPulse";
+import { usePaymentStore } from "../../store/paymentStore";
 import "./control-tray.scss";
 import SettingsDialog from "../settings-dialog/SettingsDialog";
 
@@ -87,6 +88,8 @@ function ControlTray({
 
   const { client, connected, connect, disconnect, volume } =
     useLiveAPIContext();
+  
+  const { upiMode, setUpiMode } = usePaymentStore();
 
   useEffect(() => {
     if (!connected && connectButtonRef.current) {
@@ -246,6 +249,7 @@ function ControlTray({
             />
           </>
         )}
+        <UpiToggleButton />
         {children}
       </nav>
 
@@ -267,5 +271,25 @@ function ControlTray({
     </section>
   );
 }
+
+const UpiToggleButton = memo(() => {
+  const { upiMode, setUpiMode } = usePaymentStore();
+  const { connected } = useLiveAPIContext();
+  
+  return (
+    <button 
+      className={cn("action-button upi-button", { 
+        active: upiMode,
+        disabled: !connected 
+      })} 
+      onClick={() => setUpiMode(!upiMode)}
+      title={upiMode ? "Exit UPI Scan Mode" : "Enter UPI Payment Mode"}
+    >
+      <span className="material-symbols-outlined">{upiMode ? "qr_code_scanner_off" : "qr_code_scanner"}</span>
+    </button>
+  );
+});
+
+UpiToggleButton.displayName = 'UpiToggleButton';
 
 export default memo(ControlTray);

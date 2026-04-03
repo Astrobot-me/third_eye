@@ -182,3 +182,25 @@
     opacity: 0.9;
   }
 }
+
+.upi-button {
+  &.active {
+    background: var(--Green-600, #34a853);
+    color: white;
+
+    &:hover {
+      background: var(--Green-500, #2ea44f);
+      border-color: var(--Green-400);
+    }
+  }
+
+  &:not(.active):hover {
+    background: rgba(52, 168, 83, 0.1);
+    border-color: var(--Green-500);
+  }
+
+  &.disabled {
+    color: var(--Neutral-30);
+    background: transparent;
+  }
+}
