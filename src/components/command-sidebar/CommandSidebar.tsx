@@ -18,8 +18,8 @@ export default function CommandSidebar() {
       {/* Branding Section */}
       <div className="command-sidebar__brand">
         <div className="command-sidebar__logo">
-          <span className="command-sidebar__logo-icon">◈</span>
-          <span className="command-sidebar__logo-text">VisionAI</span>
+          <img className="command-sidebar__logo-icon" src="" alt=""> </img>
+          <span className="command-sidebar__logo-text">Third Eye</span>
         </div>
         <div className="command-sidebar__subtitle">COMMAND_HUD</div>
         <div className="command-sidebar__status">
