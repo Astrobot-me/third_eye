@@ -127,6 +127,19 @@ function ControlTray({
     };
   }, []);
 
+  // Track previous PTT state to detect release
+  const prevPushToTalkRef = useRef(pushToTalkActive);
+  
+  // Send audioStreamEnd when PTT is released to signal end of speech
+  useEffect(() => {
+    // Detect PTT release: was active, now inactive
+    if (prevPushToTalkRef.current && !pushToTalkActive && connected && muted) {
+      // Only send if mic is muted (PTT mode) - don't interfere with always-on mic
+      client.sendAudioStreamEnd();
+    }
+    prevPushToTalkRef.current = pushToTalkActive;
+  }, [pushToTalkActive, connected, muted, client]);
+
   useEffect(() => {
     const onData = (base64: string) => {
       // Check refs directly for most up-to-date values (avoids async useEffect timing issues)

@@ -270,6 +270,16 @@ export class GenAILiveClient extends EventEmitter<LiveClientEventTypes> {
   }
 
   /**
+   * Signal end of audio stream to flush VAD buffer.
+   * Call this when PTT is released or mic is muted to ensure
+   * the model processes any buffered audio immediately.
+   */
+  sendAudioStreamEnd() {
+    this.session?.sendRealtimeInput({ audioStreamEnd: true });
+    this.log(`client.audioStreamEnd`, "Audio stream ended");
+  }
+
+  /**
    *  send a response to a function call and provide the id of the functions you are responding to
    */
   sendToolResponse(toolResponse: LiveClientToolResponse) {
