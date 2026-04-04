@@ -22,6 +22,9 @@ import {
   Modality,
   Type,
 } from "@google/genai";
+import { qrScanDeclaration } from "../../tools/qr-scanner";
+import { upiPaymentDeclaration } from "../../tools/upi-payment";
+import { makePaymentDeclaration } from "../../tools/make-payment";
 
 const declaration: FunctionDeclaration = {
   name: "render_altair",
@@ -38,6 +41,14 @@ const declaration: FunctionDeclaration = {
     required: ["json_graph"],
   },
 };
+
+// All function declarations for the app
+const allFunctionDeclarations: FunctionDeclaration[] = [
+  declaration,
+  qrScanDeclaration,
+  upiPaymentDeclaration,
+  makePaymentDeclaration,
+];
 
 function AltairComponent() {
   const [jsonString, setJSONString] = useState<string>("");
@@ -60,7 +71,7 @@ function AltairComponent() {
       tools: [
         // there is a free-tier quota for search
         { googleSearch: {} },
-        { functionDeclarations: [declaration] },
+        { functionDeclarations: allFunctionDeclarations },
       ],
     });
   }, [setConfig, setModel]);
@@ -70,20 +81,24 @@ function AltairComponent() {
       if (!toolCall.functionCalls) {
         return;
       }
-      const fc = toolCall.functionCalls.find(
+      
+      // Only handle render_altair calls - don't respond to other tools
+      const altairCalls = toolCall.functionCalls.filter(
         (fc) => fc.name === declaration.name
       );
+      
+      const fc = altairCalls[0];
       if (fc) {
         const str = (fc.args as any).json_graph;
         setJSONString(str);
       }
-      // send data for the response of your tool call
-      // in this case Im just saying it was successful
-      if (toolCall.functionCalls.length) {
+      
+      // Only respond to altair calls, not ALL tool calls
+      if (altairCalls.length) {
         setTimeout(
           () =>
             client.sendToolResponse({
-              functionResponses: toolCall.functionCalls?.map((fc) => ({
+              functionResponses: altairCalls.map((fc) => ({
                 response: { output: { success: true } },
                 id: fc.id,
                 name: fc.name,

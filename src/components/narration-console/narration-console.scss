@@ -225,6 +225,53 @@
   }
 
   // =========================================================================
+  // MESSAGE TYPE: QR SCAN (blue/purple accent)
+  // =========================================================================
+  &__message--qr-scan {
+    .narration-console__role {
+      color: #8b5cf6;
+      background: rgba(139, 92, 246, 0.2);
+    }
+
+    .narration-console__text {
+      color: var(--on-surface);
+    }
+  }
+
+  // =========================================================================
+  // MESSAGE TYPE: PAYMENT (green accent)
+  // =========================================================================
+  &__message--payment {
+    @include glass;
+    background: rgba(34, 197, 94, 0.1);
+    border-color: rgba(34, 197, 94, 0.3);
+
+    .narration-console__role {
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.2);
+    }
+
+    .narration-console__text {
+      color: var(--on-surface);
+      font-weight: 500;
+    }
+  }
+
+  // =========================================================================
+  // MESSAGE TYPE: PAYMENT ERROR (orange/red accent)
+  // =========================================================================
+  &__message--payment-error {
+    .narration-console__role {
+      color: var(--error);
+      background: rgba(255, 77, 77, 0.15);
+    }
+
+    .narration-console__text {
+      color: var(--error);
+    }
+  }
+
+  // =========================================================================
   // INPUT CONTAINER
   // =========================================================================
   &__input-container {

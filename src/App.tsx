@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
 import AppLayout from "./components/layout/AppLayout";
@@ -28,6 +28,9 @@ import { Altair } from "./components/altair/Altair";
 import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
 import { LiveClientOptions } from "./types";
+import { QrScannerOverlay, OverlayState } from "./components/qr-scanner-overlay/QrScannerOverlay";
+import { PaymentToolHandler } from "./components/payment-tool-handler/PaymentToolHandler";
+import { PaymentHistoryDrawer } from "./components/payment-history-drawer/PaymentHistoryDrawer";
 
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
 if (typeof API_KEY !== "string") {
@@ -43,6 +46,17 @@ const apiOptions: LiveClientOptions = {
 function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+  const [overlayState, setOverlayState] = useState<OverlayState>({ state: "idle" });
+  const [isPaymentDrawerOpen, setIsPaymentDrawerOpen] = useState(false);
+
+  // Memoize setOverlayState to prevent unnecessary re-renders
+  const handleOverlayStateChange = useCallback((state: OverlayState) => {
+    setOverlayState(state);
+  }, []);
+
+  const togglePaymentDrawer = useCallback(() => {
+    setIsPaymentDrawerOpen((prev) => !prev);
+  }, []);
 
   const mainContent = (
     <>
@@ -68,12 +82,28 @@ function App() {
       supportsVideo={true}
       onVideoStreamChange={setVideoStream}
       enableEditingSettings={true}
+      onPaymentHistoryClick={togglePaymentDrawer}
     />
   );
 
   return (
     <div className="App">
       <LiveAPIProvider options={apiOptions}>
+        {/* QR Scanner Overlay - renders on top when active */}
+        <QrScannerOverlay {...overlayState} />
+        
+        {/* Payment History Drawer */}
+        <PaymentHistoryDrawer 
+          isOpen={isPaymentDrawerOpen} 
+          onClose={() => setIsPaymentDrawerOpen(false)} 
+        />
+        
+        {/* Payment tool handler - listens for QR/UPI tool calls */}
+        <PaymentToolHandler 
+          videoRef={videoRef} 
+          setOverlayState={handleOverlayStateChange} 
+        />
+        
         <AppLayout
           sidebar={<CommandSidebar />}
           statusBar={<StatusBar />}

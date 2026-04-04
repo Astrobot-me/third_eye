@@ -2,10 +2,11 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import cn from "classnames";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import { useLoggerStore } from "../../lib/store-logger";
+import { usePaymentHistoryStore, HistoryEntry } from "../../lib/payment-history-store";
 import { StreamingLog } from "../../types";
 import "./narration-console.scss";
 
-export type NarrationMessageType = "SYSTEM" | "AI_NARRATOR" | "URGENT" | "ANALYZING";
+export type NarrationMessageType = "SYSTEM" | "AI_NARRATOR" | "URGENT" | "ANALYZING" | "QR_SCAN" | "PAYMENT" | "PAYMENT_ERROR";
 
 export interface NarrationMessage {
   id: string;
@@ -85,7 +86,7 @@ function extractMessageText(log: StreamingLog): string {
   return JSON.stringify(message);
 }
 
-function getRoleLabel(type: NarrationMessageType, log: StreamingLog): string {
+function getRoleLabel(type: NarrationMessageType, log?: StreamingLog): string {
   switch (type) {
     case "URGENT":
       return "⚠ ALERT";
@@ -93,13 +94,63 @@ function getRoleLabel(type: NarrationMessageType, log: StreamingLog): string {
       return "AI NARRATOR";
     case "ANALYZING":
       return "◉ ANALYZING";
+    case "QR_SCAN":
+      return "📷 QR SCAN";
+    case "PAYMENT":
+      return "💳 PAYMENT";
+    case "PAYMENT_ERROR":
+      return "⚠ PAY ERROR";
     case "SYSTEM":
     default:
-      if (typeof log.message === "object" && "turns" in log.message) {
+      if (log && typeof log.message === "object" && "turns" in log.message) {
         return "USER";
       }
       return "SYSTEM";
   }
+}
+
+function transformPaymentEntriesToMessages(entries: HistoryEntry[]): NarrationMessage[] {
+  return entries.map((entry) => {
+    let type: NarrationMessageType;
+    let text: string;
+
+    switch (entry.type) {
+      case "QR_SCAN":
+        type = "QR_SCAN";
+        if (entry.success) {
+          text = entry.merchantName
+            ? `Scanned: ${entry.merchantName} (${entry.upiId})${entry.amount ? ` ₹${entry.amount}` : ""}`
+            : entry.upiId
+            ? `Scanned UPI: ${entry.upiId}`
+            : "QR code scanned (non-UPI)";
+        } else {
+          text = "QR scan failed";
+        }
+        break;
+
+      case "PAYMENT":
+        type = "PAYMENT";
+        text = `${entry.status.toUpperCase()}: ₹${entry.amount} to ${entry.merchantName || entry.upiId}`;
+        break;
+
+      case "ERROR":
+        type = "PAYMENT_ERROR";
+        text = entry.message;
+        break;
+
+      default:
+        type = "SYSTEM";
+        text = "Unknown entry";
+    }
+
+    return {
+      id: entry.id,
+      timestamp: entry.timestamp,
+      type,
+      role: getRoleLabel(type),
+      text,
+    };
+  });
 }
 
 function transformLogsToMessages(logs: StreamingLog[], sessionStart: Date): NarrationMessage[] {
@@ -138,15 +189,24 @@ function transformLogsToMessages(logs: StreamingLog[], sessionStart: Date): Narr
 export default function NarrationConsole() {
   const { connected, client } = useLiveAPIContext();
   const { log, logs } = useLoggerStore();
+  const paymentEntries = usePaymentHistoryStore((state) => state.entries);
   const [inputText, setInputText] = useState("");
   const messagesRef = useRef<HTMLDivElement>(null);
   const lastScrollHeightRef = useRef<number>(-1);
   const sessionStartRef = useRef<Date>(new Date());
 
-  const messages = useMemo(
-    () => transformLogsToMessages(logs, sessionStartRef.current),
-    [logs]
-  );
+  // Merge regular logs with payment history, sorted by timestamp
+  const messages = useMemo(() => {
+    const logMessages = transformLogsToMessages(logs, sessionStartRef.current);
+    const paymentMessages = transformPaymentEntriesToMessages(paymentEntries);
+    
+    // Merge and sort by timestamp
+    const allMessages = [...logMessages, ...paymentMessages].sort(
+      (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+    );
+    
+    return allMessages;
+  }, [logs, paymentEntries]);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -215,6 +275,9 @@ export default function NarrationConsole() {
                 "narration-console__message--narrator": msg.type === "AI_NARRATOR",
                 "narration-console__message--urgent": msg.type === "URGENT",
                 "narration-console__message--analyzing": msg.type === "ANALYZING",
+                "narration-console__message--qr-scan": msg.type === "QR_SCAN",
+                "narration-console__message--payment": msg.type === "PAYMENT",
+                "narration-console__message--payment-error": msg.type === "PAYMENT_ERROR",
               })}
             >
               <div className="narration-console__message-header">

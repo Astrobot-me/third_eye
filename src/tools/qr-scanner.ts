@@ -19,17 +19,31 @@ export const qrScanDeclaration: FunctionDeclaration = {
 interface QrScannerHandlerDeps {
   preferredCamera?: "environment" | "user";
   scanTimeoutMs?: number;
+  scanIntervalMs?: number;
 }
 
 export function createQrScannerHandler(
   videoElement: HTMLVideoElement | null,
   deps?: QrScannerHandlerDeps
 ) {
-  let qrScanner: QrScanner | null = null;
+  let scanInterval: ReturnType<typeof setInterval> | null = null;
   let scanTimeout: ReturnType<typeof setTimeout> | null = null;
+  
   const options = {
     preferredCamera: deps?.preferredCamera || "environment",
     scanTimeoutMs: deps?.scanTimeoutMs || 30000,
+    scanIntervalMs: deps?.scanIntervalMs || 200, // Scan every 200ms
+  };
+
+  const cleanup = () => {
+    if (scanInterval) {
+      clearInterval(scanInterval);
+      scanInterval = null;
+    }
+    if (scanTimeout) {
+      clearTimeout(scanTimeout);
+      scanTimeout = null;
+    }
   };
 
   const handleToolCall = (
@@ -44,7 +58,6 @@ export function createQrScannerHandler(
 
     if (!fc) return;
 
-    const preferredCamera = ((fc.args as unknown as { preferredCamera?: string })?.preferredCamera) as "environment" | "user" || options.preferredCamera;
     const toolId = fc.id;
     const toolName = fc.name;
 
@@ -59,87 +72,70 @@ export function createQrScannerHandler(
       return;
     }
 
-    if (qrScanner) {
-      qrScanner.destroy();
+    // Check if video is actually playing
+    if (videoElement.readyState < 2 || videoElement.paused) {
+      sendResponse([
+        {
+          response: { output: { success: false, error: "Video stream not ready. Please ensure webcam is active." } },
+          id: toolId || "unknown",
+          name: toolName || "scan_qr_code",
+        },
+      ]);
+      return;
     }
 
-    const cleanupTimeout = () => {
-      if (scanTimeout) {
-        clearTimeout(scanTimeout);
-        scanTimeout = null;
-      }
-    };
+    // Clean up any previous scan
+    cleanup();
 
-    qrScanner = new QrScanner(
-      videoElement,
-      (result: QrScanner.ScanResult) => {
-        cleanupTimeout();
-        const data = result.data;
-        qrScanner?.stop();
-        sendResponse([
-          {
-            response: { output: { success: true, data } },
-            id: toolId || "unknown",
-            name: toolName || "scan_qr_code",
-          },
-        ]);
-      },
-      {
-        preferredCamera,
-        returnDetailedScanResult: true,
-        onDecodeError: (error: Error | string) => {
-          const errorMsg = typeof error === "string" ? error : error.message;
-          if (errorMsg !== QrScanner.NO_QR_CODE_FOUND) {
-            cleanupTimeout();
-            qrScanner?.stop();
-            sendResponse([
-              {
-                response: { output: { success: false, error: errorMsg } },
-                id: toolId || "unknown",
-                name: toolName || "scan_qr_code",
-              },
-            ]);
-          }
-        },
-      }
-    );
+    let resolved = false;
 
-    qrScanner.start().then(() => {
-      scanTimeout = setTimeout(() => {
-        if (qrScanner) {
-          qrScanner.stop();
-          qrScanner.destroy();
-          qrScanner = null;
+    // Use scanImage() in a polling loop - doesn't hijack the video stream
+    scanInterval = setInterval(async () => {
+      if (resolved) return;
+
+      try {
+        // scanImage() is a static method that scans from existing video/image
+        // It doesn't request camera permissions or modify srcObject
+        const result = await QrScanner.scanImage(videoElement, {
+          returnDetailedScanResult: true,
+        });
+
+        if (result && result.data && !resolved) {
+          resolved = true;
+          cleanup();
           sendResponse([
             {
-              response: { output: { success: false, error: "Scan timeout: No QR code detected within " + (options.scanTimeoutMs / 1000) + " seconds" } },
+              response: { output: { success: true, data: result.data } },
               id: toolId || "unknown",
               name: toolName || "scan_qr_code",
             },
           ]);
         }
-      }, options.scanTimeoutMs);
-    }).catch((err: Error) => {
-      sendResponse([
-        {
-          response: { output: { success: false, error: err.message } },
-          id: toolId || "unknown",
-          name: toolName || "scan_qr_code",
-        },
-      ]);
-    });
-  };
+      } catch {
+        // No QR code found in this frame, keep scanning
+        // scanImage throws when no QR is found
+      }
+    }, options.scanIntervalMs);
 
-  const cleanup = () => {
-    if (scanTimeout) {
-      clearTimeout(scanTimeout);
-      scanTimeout = null;
-    }
-    if (qrScanner) {
-      qrScanner.stop();
-      qrScanner.destroy();
-      qrScanner = null;
-    }
+    // Timeout after configured duration
+    scanTimeout = setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        cleanup();
+        sendResponse([
+          {
+            response: { 
+              output: { 
+                success: false, 
+                error: `Scan timeout: No QR code detected within ${options.scanTimeoutMs / 1000} seconds` 
+              } 
+            },
+            id: toolId || "unknown",
+            name: toolName || "scan_qr_code",
+          },
+        ]);
+      }
+    }, options.scanTimeoutMs);
   };
 
   return { handleToolCall, cleanup };

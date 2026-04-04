@@ -33,6 +33,7 @@ export type ControlTrayProps = {
   supportsVideo: boolean;
   onVideoStreamChange?: (stream: MediaStream | null) => void;
   enableEditingSettings?: boolean;
+  onPaymentHistoryClick?: () => void;
 };
 
 type MediaStreamButtonProps = {
@@ -65,6 +66,7 @@ function ControlTray({
   onVideoStreamChange = () => {},
   supportsVideo,
   enableEditingSettings,
+  onPaymentHistoryClick,
 }: ControlTrayProps) {
   const videoStreams = [useWebcam(), useScreenCapture()];
   const [activeVideoStream, setActiveVideoStream] =
@@ -305,6 +307,18 @@ function ControlTray({
             {mode === 'active' ? 'visibility' : 'visibility_off'}
           </span>
         </button>
+        
+        {/* Payment History button */}
+        {onPaymentHistoryClick && (
+          <button
+            className="action-button"
+            onClick={onPaymentHistoryClick}
+            aria-label="Payment History"
+            title="Payment History"
+          >
+            <span className="material-symbols-outlined">receipt_long</span>
+          </button>
+        )}
         {children}
       </nav>
 
