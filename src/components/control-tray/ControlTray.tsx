@@ -221,6 +221,7 @@ function ControlTray({
   }, [connected, activeVideoStream, client, videoRef, mode]); // Added mode to dependencies
 
   // Active mode narration trigger - sends periodic prompts to make model describe scene
+  // Using sendRealtimeText to send in the same stream as video frames for proper context
   useEffect(() => {
     if (!connected || mode !== 'active' || !activeVideoStream) {
       return;
@@ -228,12 +229,12 @@ function ControlTray({
 
     // Send initial trigger after connecting in active mode
     const initialDelay = setTimeout(() => {
-      client.send({ text: ACTIVE_MODE_TRIGGER_PROMPT });
+      client.sendRealtimeText(ACTIVE_MODE_TRIGGER_PROMPT);
     }, 1000);
 
     // Send trigger prompt every 4 seconds in active mode
     const intervalId = setInterval(() => {
-      client.send({ text: ACTIVE_MODE_TRIGGER_PROMPT });
+      client.sendRealtimeText(ACTIVE_MODE_TRIGGER_PROMPT);
     }, 4000);
 
     return () => {

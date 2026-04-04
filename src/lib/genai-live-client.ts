@@ -280,6 +280,16 @@ export class GenAILiveClient extends EventEmitter<LiveClientEventTypes> {
   }
 
   /**
+   * Send text via realtime input stream.
+   * Use this for prompts that need to be in the same stream as video frames
+   * (e.g., [DESCRIBE] trigger in active mode) to ensure proper context association.
+   */
+  sendRealtimeText(text: string) {
+    this.session?.sendRealtimeInput({ text });
+    this.log(`client.realtimeText`, text);
+  }
+
+  /**
    *  send a response to a function call and provide the id of the functions you are responding to
    */
   sendToolResponse(toolResponse: LiveClientToolResponse) {
