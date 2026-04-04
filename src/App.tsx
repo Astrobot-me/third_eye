@@ -30,6 +30,8 @@ if (typeof API_KEY !== "string") {
 
 const apiOptions: LiveClientOptions = {
   apiKey: API_KEY,
+  // Use v1alpha API version to enable proactive audio feature
+  httpOptions: { apiVersion: "v1alpha" },
 };
 
 function App() {

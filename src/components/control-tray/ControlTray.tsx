@@ -22,6 +22,7 @@ import { UseMediaStreamResult } from "../../hooks/use-media-stream-mux";
 import { useScreenCapture } from "../../hooks/use-screen-capture";
 import { useWebcam } from "../../hooks/use-webcam";
 import { AudioRecorder } from "../../lib/audio-recorder";
+import { ACTIVE_MODE_TRIGGER_PROMPT } from "../../lib/active-mode-prompt";
 import AudioPulse from "../audio-pulse/AudioPulse";
 import "./control-tray.scss";
 import SettingsDialog from "../settings-dialog/SettingsDialog";
@@ -85,7 +86,7 @@ function ControlTray({
   mutedRef.current = muted;
   pushToTalkActiveRef.current = pushToTalkActive;
 
-  const { client, connected, connect, disconnect, volume } =
+  const { client, connected, connect, disconnect, volume, mode, toggleMode } =
     useLiveAPIContext();
 
   useEffect(() => {
@@ -183,17 +184,50 @@ function ControlTray({
         const data = base64.slice(base64.indexOf(",") + 1, Infinity);
         client.sendRealtimeInput([{ mimeType: "image/jpeg", data }]);
       }
-      if (connected) {
+      // Only continue loop if connected AND in active mode (or has video stream in passive)
+      if (connected && activeVideoStream !== null) {
         timeoutId = window.setTimeout(sendVideoFrame, 1000 / 0.5);
       }
     }
+    
+    // Only send video frames if:
+    // - In active mode: always send when connected with video stream
+    // - In passive mode: only send when video stream is explicitly active AND user has enabled it
+    // Note: The existing logic already handles when video streams are active via the hooks
+    // In passive mode, we rely on the user manually activating streams via the UI
     if (connected && activeVideoStream !== null) {
+      // In active mode: always stream when we have a stream
+      // In passive mode: we still send frames when there's a stream (user-activated)
+      // The difference is that in passive mode, streams aren't auto-activated
       requestAnimationFrame(sendVideoFrame);
     }
+    
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [connected, activeVideoStream, client, videoRef]);
+  }, [connected, activeVideoStream, client, videoRef, mode]); // Added mode to dependencies
+
+  // Active mode narration trigger - sends periodic prompts to make model describe scene
+  useEffect(() => {
+    if (!connected || mode !== 'active' || !activeVideoStream) {
+      return;
+    }
+
+    // Send initial trigger after connecting in active mode
+    const initialDelay = setTimeout(() => {
+      client.send({ text: ACTIVE_MODE_TRIGGER_PROMPT });
+    }, 1000);
+
+    // Send trigger prompt every 4 seconds in active mode
+    const intervalId = setInterval(() => {
+      client.send({ text: ACTIVE_MODE_TRIGGER_PROMPT });
+    }, 4000);
+
+    return () => {
+      clearTimeout(initialDelay);
+      clearInterval(intervalId);
+    };
+  }, [connected, mode, activeVideoStream, client]);
 
   //handler for swapping from one video-stream to the next
   const changeStreams = (next?: UseMediaStreamResult) => async () => {
@@ -246,6 +280,17 @@ function ControlTray({
             />
           </>
         )}
+        {/* Mode toggle button */}
+        <button
+          className={cn("action-button mode-toggle", { active: mode === 'active' })}
+          onClick={toggleMode}
+          aria-label={`Switch to ${mode === 'passive' ? 'active' : 'passive'} mode`}
+          title={mode === 'passive' ? 'Enable Active Mode' : 'Disable Active Mode'}
+        >
+          <span className="material-symbols-outlined">
+            {mode === 'active' ? 'visibility' : 'visibility_off'}
+          </span>
+        </button>
         {children}
       </nav>
 
