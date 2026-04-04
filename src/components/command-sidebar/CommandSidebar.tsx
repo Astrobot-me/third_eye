@@ -1,5 +1,6 @@
 import { RiEyeLine } from "react-icons/ri";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
+import Esp32Terminal from "./Esp32Terminal";
 import "./command-sidebar.scss";
 
 export default function CommandSidebar() {
@@ -41,6 +42,9 @@ export default function CommandSidebar() {
           <span className="command-sidebar__nav-label">LIVE VIEW</span>
         </button>
       </nav>
+
+      {/* ESP32 Terminal */}
+      <Esp32Terminal />
 
       {/* Primary CTA */}
       <div className="command-sidebar__cta">

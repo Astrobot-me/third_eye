@@ -16,11 +16,12 @@
 
 import cn from "classnames";
 
-import { memo, ReactNode, RefObject, useEffect, useRef, useState } from "react";
+import { memo, ReactNode, RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import { UseMediaStreamResult } from "../../hooks/use-media-stream-mux";
 import { useScreenCapture } from "../../hooks/use-screen-capture";
 import { useWebcam } from "../../hooks/use-webcam";
+import { useESP32WebSocket, ESP32Command } from "../../hooks/use-esp32-websocket";
 import { AudioRecorder } from "../../lib/audio-recorder";
 import { ACTIVE_MODE_TRIGGER_PROMPT } from "../../lib/active-mode-prompt";
 import AudioPulse from "../audio-pulse/AudioPulse";
@@ -90,6 +91,118 @@ function ControlTray({
 
   const { client, connected, connect, disconnect, volume, mode, toggleMode } =
     useLiveAPIContext();
+
+  // ESP32 WebSocket command handler (wrapped in useCallback to prevent reconnects)
+  const handleESP32Command = useCallback((command: ESP32Command) => {
+    console.log('[ControlTray] Handling ESP32 command:', command);
+    
+    switch (command) {
+      // Mute controls
+      case 'TOGGLE_MUTE':
+        setMuted(prev => !prev);
+        break;
+      case 'MUTE_ON':
+        setMuted(true);
+        break;
+      case 'MUTE_OFF':
+        setMuted(false);
+        break;
+        
+      // Connection controls
+      case 'CONNECT':
+        if (!connected) connect();
+        break;
+      case 'DISCONNECT':
+        if (connected) disconnect();
+        break;
+      case 'TOGGLE_CONNECT':
+        if (connected) disconnect();
+        else connect();
+        break;
+        
+      // Mode controls (debounced in hook)
+      case 'MODE_ACTIVE':
+        if (mode !== 'active') toggleMode();
+        break;
+      case 'MODE_PASSIVE':
+        if (mode !== 'passive') toggleMode();
+        break;
+      case 'TOGGLE_MODE':
+        toggleMode();
+        break;
+        
+      // Push-to-talk controls
+      case 'PTT_START':
+        setPushToTalkActive(true);
+        break;
+      case 'PTT_STOP':
+        setPushToTalkActive(false);
+        break;
+        
+      // Webcam controls - handled via refs since changeStreams is internal
+      case 'WEBCAM_ON':
+        // Will be handled in useEffect below
+        break;
+      case 'WEBCAM_OFF':
+        // Will be handled in useEffect below
+        break;
+    }
+  }, [connected, connect, disconnect, mode, toggleMode]);
+
+  // Handle webcam commands from ESP32 via state
+  const [esp32WebcamCommand, setESP32WebcamCommand] = useState<'on' | 'off' | null>(null);
+
+  // Combined handler that routes webcam commands through state
+  const handleESP32CommandFull = useCallback((command: ESP32Command) => {
+    if (command === 'WEBCAM_ON') {
+      setESP32WebcamCommand('on');
+    } else if (command === 'WEBCAM_OFF') {
+      setESP32WebcamCommand('off');
+    } else {
+      handleESP32Command(command);
+    }
+  }, [handleESP32Command]);
+
+  // ESP32 WebSocket connection (disabled by default if REACT_APP_ESP32_IP not set)
+  const { isConnected: esp32Connected, sendToESP32 } = useESP32WebSocket({
+    onCommand: handleESP32CommandFull,
+    enabled: !!process.env.REACT_APP_ESP32_IP,
+  });
+
+  // Process ESP32 webcam commands
+  useEffect(() => {
+    if (esp32WebcamCommand === 'on' && !webcam.isStreaming) {
+      webcam.start().then((stream) => {
+        setActiveVideoStream(stream);
+        onVideoStreamChange(stream);
+        screenCapture.stop();
+      });
+    } else if (esp32WebcamCommand === 'off' && webcam.isStreaming) {
+      webcam.stop();
+      setActiveVideoStream(null);
+      onVideoStreamChange(null);
+    }
+    setESP32WebcamCommand(null);
+  }, [esp32WebcamCommand, webcam, screenCapture, onVideoStreamChange]);
+
+  // Send state changes to ESP32 for LED feedback (optional)
+  useEffect(() => {
+    if (esp32Connected) {
+      sendToESP32(`STATE:MUTED=${muted ? '1' : '0'}`);
+    }
+  }, [muted, esp32Connected, sendToESP32]);
+
+  useEffect(() => {
+    if (esp32Connected) {
+      sendToESP32(`STATE:CONNECTED=${connected ? '1' : '0'}`);
+    }
+  }, [connected, esp32Connected, sendToESP32]);
+
+  useEffect(() => {
+    if (esp32Connected) {
+      sendToESP32(`STATE:MODE=${mode}`);
+    }
+  }, [mode, esp32Connected, sendToESP32]);
 
   useEffect(() => {
     if (!connected && connectButtonRef.current) {

@@ -31,6 +31,7 @@ import { LiveClientOptions } from "./types";
 import { QrScannerOverlay, OverlayState } from "./components/qr-scanner-overlay/QrScannerOverlay";
 import { PaymentToolHandler } from "./components/payment-tool-handler/PaymentToolHandler";
 import { PaymentHistoryDrawer } from "./components/payment-history-drawer/PaymentHistoryDrawer";
+import { Esp32Provider } from "./contexts/Esp32Context";
 
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
 if (typeof API_KEY !== "string") {
@@ -88,33 +89,35 @@ function App() {
 
   return (
     <div className="App">
-      <LiveAPIProvider options={apiOptions}>
-        {/* QR Scanner Overlay - renders on top when active */}
-        <QrScannerOverlay {...overlayState} />
-        
-        {/* Payment History Drawer */}
-        <PaymentHistoryDrawer 
-          isOpen={isPaymentDrawerOpen} 
-          onClose={() => setIsPaymentDrawerOpen(false)} 
-        />
-        
-        {/* Payment tool handler - listens for QR/UPI tool calls */}
-        <PaymentToolHandler 
-          videoRef={videoRef} 
-          setOverlayState={handleOverlayStateChange} 
-        />
-        
-        <AppLayout
-          sidebar={<CommandSidebar />}
-          statusBar={<StatusBar />}
-          mainContent={mainContent}
-          narrationConsole={<NarrationConsole />}
-          bottomStatus={<BottomStatus />}
-          controlTray={controlTray}
-          videoRef={videoRef}
-          videoStream={videoStream}
-        />
-      </LiveAPIProvider>
+      <Esp32Provider>
+        <LiveAPIProvider options={apiOptions}>
+          {/* QR Scanner Overlay - renders on top when active */}
+          <QrScannerOverlay {...overlayState} />
+          
+          {/* Payment History Drawer */}
+          <PaymentHistoryDrawer 
+            isOpen={isPaymentDrawerOpen} 
+            onClose={() => setIsPaymentDrawerOpen(false)} 
+          />
+          
+          {/* Payment tool handler - listens for QR/UPI tool calls */}
+          <PaymentToolHandler 
+            videoRef={videoRef} 
+            setOverlayState={handleOverlayStateChange} 
+          />
+          
+          <AppLayout
+            sidebar={<CommandSidebar />}
+            statusBar={<StatusBar />}
+            mainContent={mainContent}
+            narrationConsole={<NarrationConsole />}
+            bottomStatus={<BottomStatus />}
+            controlTray={controlTray}
+            videoRef={videoRef}
+            videoStream={videoStream}
+          />
+        </LiveAPIProvider>
+      </Esp32Provider>
     </div>
   );
 }
