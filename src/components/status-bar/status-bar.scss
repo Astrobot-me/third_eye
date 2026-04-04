@@ -1,0 +1,49 @@
+@use "../../styles/design-tokens" as *;
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-container-low);
+  padding: var(--space-sm) var(--space-lg);
+  width: 100%;
+
+  &__mode {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  &__label {
+    @include text-label-sm;
+    color: var(--on-surface-variant);
+  }
+
+  &__toggle {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  &__toggle-btn {
+    @include text-label-sm;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: 1px solid var(--outline);
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(&--active) {
+      background: rgba(170, 255, 220, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    &--active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--on-primary);
+    }
+  }
+}

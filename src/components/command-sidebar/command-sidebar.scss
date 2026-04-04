@@ -1,0 +1,227 @@
+@use "../../styles/design-tokens.scss" as *;
+
+.command-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100vh;
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  padding: var(--space-lg) var(--space-md);
+  gap: var(--space-lg);
+
+  // Branding Section
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-lg);
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  &__logo-icon {
+    font-size: var(--headline-md);
+    color: var(--primary);
+    filter: drop-shadow(0 0 8px var(--primary));
+  }
+
+  &__logo-text {
+    font-family: var(--font-technical);
+    font-size: var(--headline-sm);
+    font-weight: 600;
+    color: var(--on-surface);
+  }
+
+  &__subtitle {
+    font-family: var(--font-technical);
+    font-size: var(--label-sm);
+    font-weight: 500;
+    letter-spacing: var(--label-spacing);
+    text-transform: uppercase;
+    color: var(--on-surface-variant);
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--surface-container);
+    border-radius: var(--radius-sm);
+    width: fit-content;
+  }
+
+  &__status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--on-surface-dim);
+    transition: all 0.3s ease;
+
+    &--online {
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+  }
+
+  &__status-text {
+    font-family: var(--font-mono);
+    font-size: var(--label-sm);
+    letter-spacing: var(--label-spacing);
+    color: var(--on-surface-variant);
+  }
+
+  // Navigation Section
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+  }
+
+  &__nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+
+    &:hover {
+      background: var(--surface-container);
+    }
+
+    &--active {
+      background: var(--surface-container-high);
+
+      .command-sidebar__nav-icon {
+        color: var(--primary);
+      }
+
+      .command-sidebar__nav-label {
+        color: var(--primary);
+      }
+    }
+  }
+
+  &__nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--title-md);
+    color: var(--on-surface-variant);
+    transition: color 0.2s ease;
+  }
+
+  &__nav-label {
+    font-family: var(--font-technical);
+    font-size: var(--label-md);
+    font-weight: 500;
+    letter-spacing: var(--label-spacing);
+    text-transform: uppercase;
+    color: var(--on-surface);
+    transition: color 0.2s ease;
+  }
+
+  // Primary CTA Button
+  &__cta {
+    padding: var(--space-md) 0;
+  }
+
+  &__connect-btn {
+    @include button-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-family: var(--font-technical);
+    font-size: var(--label-md);
+    font-weight: 600;
+    letter-spacing: var(--label-spacing);
+    text-transform: uppercase;
+
+    &--connected {
+      background: var(--surface-container-high);
+      color: var(--primary);
+      box-shadow: inset 0 0 20px var(--surface-tint);
+
+      &:hover {
+        background: var(--surface-bright);
+        filter: none;
+      }
+    }
+  }
+
+  &__connect-icon {
+    font-size: var(--title-md);
+  }
+
+  &__connect-text {
+    white-space: nowrap;
+  }
+
+  // Footer Links
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding-top: var(--space-md);
+  }
+
+  &__footer-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--on-surface-variant);
+    font-family: var(--font-human);
+    font-size: var(--body-sm);
+
+    &:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+
+    &--logout {
+      &:hover {
+        color: var(--error-dim);
+      }
+    }
+
+    span {
+      font-family: var(--font-technical);
+      font-size: var(--label-sm);
+      letter-spacing: var(--label-spacing);
+      text-transform: uppercase;
+    }
+  }
+}
+
+// Pulse glow animation for online status
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--primary), 0 0 24px var(--primary-dim);
+  }
+}

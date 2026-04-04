@@ -72,7 +72,7 @@ function ControlTray({
   const [webcam, screenCapture] = videoStreams;
   const [inVolume, setInVolume] = useState(0);
   const [audioRecorder] = useState(() => new AudioRecorder());
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [pushToTalkActive, setPushToTalkActive] = useState(false);
   const isMicActive = !muted || pushToTalkActive;
   

@@ -1,0 +1,398 @@
+// =============================================================================
+// DESIGN TOKENS: The Command Center
+// Based on DESIGN.md specification
+// =============================================================================
+
+// =============================================================================
+// 1. COLORS & TONAL ARCHITECTURE
+// =============================================================================
+
+:root {
+  // ---------------------------------------------------------------------------
+  // Surface Hierarchy (from furthest to nearest)
+  // Reject flat UI - depth through nested containers
+  // ---------------------------------------------------------------------------
+  --surface: #060e20;                    // The Foundation - furthest background
+  --surface-container-low: #091328;      // Content Zones - sections
+  --surface-container: #0f1930;          // Active Modules - cards/inputs
+  --surface-container-high: #141f38;     // Elevated components
+  --surface-container-highest: #1a2545;  // Maximum elevation
+  --surface-bright: #1e2a4a;             // Hover states
+  --surface-variant: rgba(20, 31, 56, 0.6); // Glassmorphism base (60% opacity)
+  --surface-tint: rgba(170, 255, 220, 0.08); // Ambient glow source
+
+  // ---------------------------------------------------------------------------
+  // Primary Colors - Cyber Lime
+  // High-contrast accents to guide the eye
+  // ---------------------------------------------------------------------------
+  --primary: #aaffdc;                    // Main accent (Cyber Lime)
+  --primary-container: #00fdc1;          // Gradient end, spectral glow
+  --on-primary: #003322;                 // Text on primary backgrounds
+  --primary-dim: rgba(170, 255, 220, 0.6); // Dimmed for secondary use
+
+  // ---------------------------------------------------------------------------
+  // Secondary Colors
+  // ---------------------------------------------------------------------------
+  --secondary: #7de9ff;                  // Cyan accent
+  --secondary-container: #1a3a4a;        // Selection chips background
+  --on-secondary: #002a33;               // Text on secondary
+
+  // ---------------------------------------------------------------------------
+  // Tertiary Colors - Data Visualizations
+  // Keep distinct from clickable primary actions
+  // ---------------------------------------------------------------------------
+  --tertiary: #7de9ff;                   // Graphs, charts, non-actionable data
+  --tertiary-container: #0d3040;         // Tertiary backgrounds
+  --on-tertiary: #001f29;                // Text on tertiary
+
+  // ---------------------------------------------------------------------------
+  // Error States
+  // ---------------------------------------------------------------------------
+  --error: #ff4d4d;                      // Bright error
+  --error-dim: #d7383b;                  // Error text
+  --error-container: rgba(215, 56, 59, 0.15); // Error glow behind fields
+  --on-error: #fff;                      // Text on error
+
+  // ---------------------------------------------------------------------------
+  // Outline & Borders
+  // Ghost borders only - "felt, not seen"
+  // ---------------------------------------------------------------------------
+  --outline: rgba(170, 255, 220, 0.3);   // Ghost outline for buttons
+  --outline-variant: rgba(64, 72, 93, 0.15); // Ghost border fallback
+
+  // ---------------------------------------------------------------------------
+  // Text Colors
+  // NO PURE WHITE - reduces eye strain in dark mode
+  // ---------------------------------------------------------------------------
+  --on-surface: #dee5ff;                 // Primary text (soft white)
+  --on-surface-variant: #a0a8c0;         // Secondary/muted text
+  --on-surface-dim: #6b7394;             // Disabled/placeholder text
+}
+
+// =============================================================================
+// 2. TYPOGRAPHY: The Voice of Precision
+// =============================================================================
+
+:root {
+  // ---------------------------------------------------------------------------
+  // Font Families
+  // ---------------------------------------------------------------------------
+  --font-technical: 'Space Grotesk', sans-serif;  // Display, headline, label
+  --font-human: 'Manrope', sans-serif;            // Title, body
+  --font-mono: 'Space Mono', monospace;           // Code, telemetry
+
+  // ---------------------------------------------------------------------------
+  // Type Scale - Display (Space Grotesk)
+  // Impact-heavy telemetry data
+  // ---------------------------------------------------------------------------
+  --display-lg: 3.5rem;      // 56px - Hero numbers
+  --display-md: 2.5rem;      // 40px - Section headers
+  --display-sm: 2rem;        // 32px - Card titles
+
+  // ---------------------------------------------------------------------------
+  // Type Scale - Headline (Space Grotesk)
+  // ---------------------------------------------------------------------------
+  --headline-lg: 1.75rem;    // 28px
+  --headline-md: 1.5rem;     // 24px
+  --headline-sm: 1.25rem;    // 20px
+
+  // ---------------------------------------------------------------------------
+  // Type Scale - Title (Manrope)
+  // ---------------------------------------------------------------------------
+  --title-lg: 1.25rem;       // 20px
+  --title-md: 1rem;          // 16px
+  --title-sm: 0.875rem;      // 14px
+
+  // ---------------------------------------------------------------------------
+  // Type Scale - Body (Manrope)
+  // Workhorse for AI explanations
+  // ---------------------------------------------------------------------------
+  --body-lg: 1rem;           // 16px
+  --body-md: 0.875rem;       // 14px - Default body
+  --body-sm: 0.8125rem;      // 13px
+
+  // ---------------------------------------------------------------------------
+  // Type Scale - Label (Space Grotesk)
+  // Micro-data, always uppercase with letter-spacing
+  // ---------------------------------------------------------------------------
+  --label-lg: 0.875rem;      // 14px
+  --label-md: 0.75rem;       // 12px
+  --label-sm: 0.6875rem;     // 11px - Command Center micro-data
+  
+  // Label letter-spacing for Command Center feel
+  --label-spacing: 0.05em;   // 5% letter spacing
+}
+
+// =============================================================================
+// 3. SPACING & SIZING
+// =============================================================================
+
+:root {
+  // ---------------------------------------------------------------------------
+  // Spacing Scale
+  // ---------------------------------------------------------------------------
+  --space-xs: 0.25rem;       // 4px
+  --space-sm: 0.5rem;        // 8px
+  --space-md: 1rem;          // 16px
+  --space-lg: 1.5rem;        // 24px
+  --space-xl: 2rem;          // 32px
+  --space-2xl: 3rem;         // 48px
+  --space-3xl: 4rem;         // 64px
+
+  // ---------------------------------------------------------------------------
+  // Border Radius
+  // ---------------------------------------------------------------------------
+  --radius-sm: 0.25rem;      // 4px - Chips, small elements
+  --radius-md: 0.5rem;       // 8px - Inputs, small cards
+  --radius-lg: 1rem;         // 16px - Cards
+  --radius-xl: 1.5rem;       // 24px - Large containers, signature corners
+  --radius-full: 9999px;     // Circular elements
+}
+
+// =============================================================================
+// 4. ELEVATION & DEPTH: Tonal Layering
+// =============================================================================
+
+// No traditional drop shadows - use ambient glows and tonal stacking
+
+// Ambient shadow mixin - screen glow effect
+@mixin ambient-shadow($intensity: 1) {
+  box-shadow: 0 0 #{32px * $intensity} var(--surface-tint);
+}
+
+// Ghost border - whisper of a line for high-density data
+@mixin ghost-border {
+  outline: 1px solid var(--outline-variant);
+}
+
+// =============================================================================
+// 5. GLASSMORPHISM
+// =============================================================================
+
+@mixin glass {
+  background: var(--surface-variant);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@mixin glass-elevated {
+  @include glass;
+  @include ambient-shadow(0.5);
+}
+
+// =============================================================================
+// 6. GRADIENTS
+// =============================================================================
+
+// Primary gradient for spectral glow effect
+@mixin gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+}
+
+// Subtle gradient for backgrounds
+@mixin gradient-surface {
+  background: linear-gradient(180deg, var(--surface-container-low) 0%, var(--surface) 100%);
+}
+
+// =============================================================================
+// 7. BUTTON STYLES
+// =============================================================================
+
+@mixin button-primary {
+  @include gradient-primary;
+  color: var(--on-primary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    filter: brightness(1.1);
+    @include ambient-shadow(0.5);
+  }
+  
+  &:active {
+    filter: brightness(0.95);
+  }
+}
+
+@mixin button-secondary {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--outline);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(170, 255, 220, 0.1);
+    border-color: var(--primary);
+  }
+}
+
+@mixin button-tertiary {
+  background: transparent;
+  color: var(--primary);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  
+  &:hover {
+    color: var(--primary-container);
+  }
+}
+
+// =============================================================================
+// 8. INPUT STYLES
+// =============================================================================
+
+@mixin input-field {
+  background: var(--surface-container-highest);
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--on-surface);
+  padding: var(--space-sm) var(--space-md);
+  transition: border-color 0.2s ease;
+  
+  &:focus {
+    outline: none;
+    border-bottom-color: var(--primary);
+  }
+  
+  &::placeholder {
+    color: var(--on-surface-dim);
+  }
+  
+  &.error {
+    color: var(--error-dim);
+    box-shadow: 0 0 12px var(--error-container);
+  }
+}
+
+// =============================================================================
+// 9. CARD STYLES
+// =============================================================================
+
+// Standard card
+@mixin card {
+  background: var(--surface-container);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+// Asymmetric corners - signature look for observation cards
+@mixin card-asymmetric {
+  @include card;
+  border-radius: var(--radius-xl) var(--radius-md) var(--radius-xl) var(--radius-md);
+}
+
+// Floating card with glassmorphism
+@mixin card-floating {
+  @include glass-elevated;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+// =============================================================================
+// 10. STATUS INDICATORS
+// =============================================================================
+
+@mixin status-dot($color) {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: $color;
+}
+
+@mixin status-pulse($color) {
+  @include status-dot($color);
+  animation: pulse 2s infinite;
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba($color, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 6px rgba($color, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba($color, 0);
+    }
+  }
+}
+
+// =============================================================================
+// 11. TYPOGRAPHY UTILITIES
+// =============================================================================
+
+@mixin text-display-lg {
+  font-family: var(--font-technical);
+  font-size: var(--display-lg);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+@mixin text-headline-md {
+  font-family: var(--font-technical);
+  font-size: var(--headline-md);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+@mixin text-title-md {
+  font-family: var(--font-human);
+  font-size: var(--title-md);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@mixin text-body-md {
+  font-family: var(--font-human);
+  font-size: var(--body-md);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+@mixin text-label-sm {
+  font-family: var(--font-technical);
+  font-size: var(--label-sm);
+  font-weight: 500;
+  letter-spacing: var(--label-spacing);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+@mixin text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--body-sm);
+  line-height: 1.5;
+}
+
+// =============================================================================
+// 12. LAYOUT UTILITIES
+// =============================================================================
+
+@mixin no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-container-high) var(--surface);
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--surface);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--surface-container-high);
+    border-radius: var(--radius-full);
+  }
+}

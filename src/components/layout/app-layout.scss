@@ -1,0 +1,105 @@
+@use "../../styles/design-tokens.scss" as *;
+
+// =============================================================================
+// APP LAYOUT: Three-Column Command Center
+// =============================================================================
+
+.command-center {
+  display: grid;
+  grid-template-columns: 240px 1fr 320px;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  width: 100vw;
+  background: var(--surface);
+  color: var(--on-surface);
+  overflow: hidden;
+}
+
+// =============================================================================
+// LEFT SIDEBAR
+// =============================================================================
+
+.command-sidebar-container {
+  background: var(--surface-container-low);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// =============================================================================
+// MAIN AREA (Center Column)
+// =============================================================================
+
+.main-area {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+// Status Bar Container
+.status-bar-container {
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface-container-low);
+}
+
+// Main Content Area
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+// Control Tray Container
+.control-tray-container {
+  position: absolute;
+  bottom: var(--space-2xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+// Bottom Status
+.bottom-status-container {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--surface);
+}
+
+// =============================================================================
+// RIGHT NARRATION CONSOLE
+// =============================================================================
+
+.narration-console-container {
+  background: var(--surface-container-low);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// =============================================================================
+// RESPONSIVE ADJUSTMENTS
+// =============================================================================
+
+@media (max-width: 1200px) {
+  .command-center {
+    grid-template-columns: 200px 1fr 280px;
+  }
+}
+
+@media (max-width: 900px) {
+  .command-center {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .command-sidebar-container,
+  .narration-console-container {
+    display: none;
+  }
+}

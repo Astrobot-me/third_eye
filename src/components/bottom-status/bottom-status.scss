@@ -1,0 +1,52 @@
+@use "../../styles/design-tokens" as *;
+
+.bottom-status {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  background: transparent;
+  z-index: 10;
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+
+    &.connected {
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+    }
+
+    &.connecting {
+      background: #f5c542;
+      box-shadow: 0 0 8px rgba(245, 197, 66, 0.6);
+      animation: pulse-connecting 1.5s ease-in-out infinite;
+    }
+  }
+
+  &__label {
+    font-family: var(--font-technical);
+    font-size: var(--label-sm);
+    font-weight: 500;
+    letter-spacing: var(--label-spacing);
+    text-transform: uppercase;
+    color: var(--on-surface-variant);
+    line-height: 1;
+  }
+}
+
+@keyframes pulse-connecting {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

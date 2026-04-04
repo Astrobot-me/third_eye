@@ -1,0 +1,340 @@
+@use "../../styles/design-tokens.scss" as *;
+
+.narration-console {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 400px;
+  background: var(--surface);
+  border-right: 1px solid var(--outline-variant);
+  font-family: var(--font-human);
+  color: var(--on-surface);
+
+  // =========================================================================
+  // HEADER
+  // =========================================================================
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--outline-variant);
+    background: var(--surface-container-low);
+  }
+
+  &__title {
+    @include text-label-sm;
+    color: var(--on-surface-variant);
+    margin: 0;
+    font-size: var(--label-md);
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    background: var(--surface-container);
+    font-family: var(--font-mono);
+    font-size: var(--label-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--label-spacing);
+  }
+
+  &__status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--error);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  &__status.connected &__status-dot {
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+    animation: status-pulse 2s infinite;
+  }
+
+  &__status-text {
+    color: var(--on-surface-dim);
+  }
+
+  &__status.connected &__status-text {
+    color: var(--primary);
+  }
+
+  // =========================================================================
+  // MESSAGES CONTAINER
+  // =========================================================================
+  &__messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 12px; // Whitespace between messages instead of horizontal lines
+    @include custom-scrollbar;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: var(--on-surface-dim);
+    text-align: center;
+    gap: var(--space-sm);
+  }
+
+  &__empty-icon {
+    font-size: 2rem;
+    opacity: 0.5;
+    animation: empty-pulse 3s infinite ease-in-out;
+  }
+
+  // =========================================================================
+  // MESSAGE CARD BASE
+  // =========================================================================
+  &__message {
+    position: relative;
+    padding: var(--space-md);
+    background: var(--surface-container);
+    // Asymmetric corners: 1.5rem top-left & bottom-right, smaller on others
+    border-radius: 1.5rem 0.5rem 1.5rem 0.5rem;
+    // Ghost border separator
+    border: 1px solid var(--outline-variant);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--surface-container-high);
+    }
+  }
+
+  &__message-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+  }
+
+  &__timestamp {
+    font-family: var(--font-mono);
+    font-size: var(--label-sm);
+    color: var(--on-surface-dim);
+    letter-spacing: var(--label-spacing);
+  }
+
+  &__role {
+    @include text-label-sm;
+    font-weight: 600;
+    padding: 2px var(--space-xs);
+    border-radius: var(--radius-sm);
+    background: var(--surface-container-high);
+  }
+
+  &__text {
+    margin: 0;
+    font-family: var(--font-human);
+    font-size: var(--body-md);
+    line-height: 1.6;
+    color: var(--on-surface);
+    word-wrap: break-word;
+  }
+
+  // =========================================================================
+  // MESSAGE TYPE: SYSTEM
+  // =========================================================================
+  &__message--system {
+    .narration-console__role {
+      color: var(--on-surface-variant);
+      background: transparent;
+    }
+
+    .narration-console__text {
+      color: var(--on-surface-variant);
+    }
+  }
+
+  // =========================================================================
+  // MESSAGE TYPE: AI NARRATOR (default cyan accent)
+  // =========================================================================
+  &__message--narrator {
+    .narration-console__role {
+      color: var(--secondary);
+      background: var(--secondary-container);
+    }
+
+    .narration-console__text {
+      color: var(--on-surface);
+    }
+  }
+
+  // =========================================================================
+  // MESSAGE TYPE: URGENT (red background with glow, glassmorphism)
+  // =========================================================================
+  &__message--urgent {
+    @include glass;
+    background: var(--error-container);
+    border-color: var(--error);
+    box-shadow: 0 0 20px var(--error-container), inset 0 0 30px rgba(255, 77, 77, 0.05);
+    animation: urgent-glow 2s infinite alternate;
+
+    .narration-console__role {
+      color: var(--error);
+      background: rgba(255, 77, 77, 0.2);
+    }
+
+    .narration-console__text {
+      color: var(--on-error);
+    }
+  }
+
+  // =========================================================================
+  // MESSAGE TYPE: ANALYZING (animated pulse indicator)
+  // =========================================================================
+  &__message--analyzing {
+    .narration-console__role {
+      color: var(--tertiary);
+      background: var(--tertiary-container);
+    }
+  }
+
+  &__pulse-indicator {
+    display: flex;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+
+  &__pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--tertiary);
+    animation: analyzing-pulse 1.4s infinite ease-in-out;
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+
+  // =========================================================================
+  // INPUT CONTAINER
+  // =========================================================================
+  &__input-container {
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--outline-variant);
+    background: var(--surface-container-low);
+
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: var(--surface-container-highest);
+    border-radius: var(--radius-md);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease;
+
+    &:focus-within {
+      border-color: var(--primary);
+    }
+  }
+
+  &__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--on-surface);
+    font-family: var(--font-human);
+    font-size: var(--body-md);
+    padding: var(--space-sm);
+    outline: none;
+
+    &::placeholder {
+      color: var(--on-surface-dim);
+    }
+  }
+
+  &__send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--on-surface-dim);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--surface-container);
+      color: var(--primary);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .material-symbols-outlined {
+      font-size: 20px;
+    }
+  }
+}
+
+// =============================================================================
+// ANIMATIONS
+// =============================================================================
+
+@keyframes status-pulse {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 12px var(--primary), 0 0 20px rgba(170, 255, 220, 0.3);
+  }
+}
+
+@keyframes urgent-glow {
+  0% {
+    box-shadow: 0 0 15px var(--error-container);
+  }
+  100% {
+    box-shadow: 0 0 25px var(--error-container), 0 0 40px rgba(255, 77, 77, 0.15);
+  }
+}
+
+@keyframes analyzing-pulse {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes empty-pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}

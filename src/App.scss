@@ -1,61 +1,66 @@
+@use "./styles/design-tokens.scss" as *;
+
 :root {
-  --text: white;
+  // Legacy variables for backward compatibility during migration
+  --text: var(--on-surface);
   --gray-200: #b4b8bb;
   --gray-300: #80868b;
   --gray-500: #5f6368;
   --gray-600: #444444;
   --gray-700: #202020;
   --gray-800: #171717;
-  --gray-900: #111111;
+  --gray-900: var(--surface);
   --gray-1000: #0a0a0a;
-  --border-stroke: #444444;
-  --accent-blue: rgb(161, 228, 242);
-  --accent-blue-active-bg: #001233;
-  --accent-blue-active: #98beff;
-  --accent-blue-headers: #448dff;
-  --accent-green: rgb(168, 218, 181);
+  --border-stroke: var(--outline-variant);
+  --accent-blue: var(--secondary);
+  --accent-blue-active-bg: var(--surface-container);
+  --accent-blue-active: var(--secondary);
+  --accent-blue-headers: var(--secondary);
+  --accent-green: var(--primary);
 
-  --midnight-blue: rgb(0, 18, 51);
-  --blue-30: #99beff;
+  --midnight-blue: var(--surface);
+  --blue-30: var(--secondary);
 
-  --accent-red: #ff4600;
+  --accent-red: var(--error);
 
-  --background: var(--gray-900);
-  --color: var(--text);
+  --background: var(--surface);
+  --color: var(--on-surface);
 
-  scrollbar-color: var(--gray-600) var(--gray-900);
+  scrollbar-color: var(--surface-container-high) var(--surface);
   scrollbar-width: thin;
 
-  --font-family: "Space Mono", monospace;
+  --font-family: var(--font-mono);
 
-  /* */
-  --Neutral-00: #000;
-  --Neutral-5: #181a1b;
-  --Neutral-10: #1c1f21;
-  --Neutral-15: #232729;
-  --Neutral-20: #2a2f31;
-  --Neutral-30: #404547;
-  --Neutral-50: #707577;
-  --Neutral-60: #888d8f;
+  // Legacy neutral scale mapped to new tokens
+  --Neutral-00: var(--surface);
+  --Neutral-5: var(--surface-container-low);
+  --Neutral-10: var(--surface-container);
+  --Neutral-15: var(--surface-container-high);
+  --Neutral-20: var(--surface-container-highest);
+  --Neutral-30: var(--surface-bright);
+  --Neutral-50: var(--on-surface-dim);
+  --Neutral-60: var(--on-surface-variant);
   --Neutral-80: #c3c6c7;
-  --Neutral-90: #e1e2e3;
+  --Neutral-90: var(--on-surface);
 
-  --Green-500: #0d9c53;
+  --Green-500: var(--primary);
   --Green-700: #025022;
 
-  --Blue-400: #80c1ff;
-  --Blue-500: #1f94ff;
-  --Blue-800: #0f3557;
+  --Blue-400: var(--secondary);
+  --Blue-500: var(--secondary);
+  --Blue-800: var(--secondary-container);
 
   --Red-400: #ff9c7a;
-  --Red-500: #ff4600;
+  --Red-500: var(--error);
   --Red-600: #e03c00;
   --Red-700: #bd3000;
 }
 
 body {
-  font-family: "Space Mono", monospace;
-  background: var(--Neutral-30);
+  font-family: var(--font-human);
+  background: var(--surface);
+  margin: 0;
+  padding: 0;
 }
 
 .material-symbols-outlined {
