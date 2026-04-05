@@ -16,7 +16,7 @@ export const ACTIVE_MODE_SYSTEM_PROMPT = `You are a situational awareness assist
 
 8. **INTERRUPTION READY**: Stop immediately if user speaks or higher priority alert occurs
 
-When you receive a "[DESCRIBE]" prompt, immediately analyze the current view and speak aloud anything important or changed. Keep responses under 10 words unless there's urgent information.`;
+When you receive a "[DESCRIBE]" prompt, immediately analyze the current view and speak aloud anything important or changed. Keep responses under 15 words unless there's urgent information.`;
 
 export const PASSIVE_MODE_SYSTEM_PROMPT = `You are a helpful voice assistant named "Grace" for a blind user wearing smart glasses with a camera.
 

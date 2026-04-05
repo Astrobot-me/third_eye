@@ -243,7 +243,7 @@ export function createMakePaymentHandler(
               setTimeout(() => setOverlayState({ state: "idle" }), 3000);
               resolve('failed');
             }
-          }, 30000);
+          }, 20000);
         });
 
         // Handle auth result
