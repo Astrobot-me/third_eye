@@ -108,6 +108,16 @@ function AuthCountdown({ upiData, onCancel }: { upiData: UpiQrData; onCancel: ()
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onCancel();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onCancel]);
+
   return (
     <div className="auth-countdown">
       <div className="auth-timer">

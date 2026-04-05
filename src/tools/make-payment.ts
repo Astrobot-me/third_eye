@@ -228,6 +228,7 @@ export function createMakePaymentHandler(
               clearInterval(pollInterval);
               setOverlayState({ state: "auth_failed", message: "Biometric verification denied" });
               esp32Deps.setAuthStatus('idle');
+              setTimeout(() => setOverlayState({ state: "idle" }), 3000);
               resolve('failed');
             }
           }, 200);
@@ -239,6 +240,7 @@ export function createMakePaymentHandler(
               clearInterval(pollInterval);
               setOverlayState({ state: "auth_failed", message: "Authentication timed out" });
               esp32Deps.setAuthStatus('idle');
+              setTimeout(() => setOverlayState({ state: "idle" }), 3000);
               resolve('failed');
             }
           }, 30000);
