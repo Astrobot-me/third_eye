@@ -18,7 +18,9 @@ export type ESP32Command =
   | 'CONNECT' | 'DISCONNECT' | 'TOGGLE_CONNECT'
   | 'MODE_ACTIVE' | 'MODE_PASSIVE' | 'TOGGLE_MODE'
   | 'WEBCAM_ON' | 'WEBCAM_OFF'
-  | 'PTT_START' | 'PTT_STOP';
+  | 'PTT_START' | 'PTT_STOP'
+  | 'AUTH_SUCCESS'
+  | 'AUTH_FAILED';
 
 interface UseESP32WebSocketOptions {
   onCommand: (command: ESP32Command) => void;
@@ -44,7 +46,7 @@ export function useESP32WebSocket({
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const lastCommandTimeRef = useRef<Record<string, number>>({});
   
-  const { setConnected, addLog } = useEsp32Context();
+  const { setConnected, addLog, setAuthStatus } = useEsp32Context();
   
   // Store onCommand in ref to avoid reconnection on callback change
   const onCommandRef = useRef(onCommand);
@@ -77,6 +79,13 @@ export function useESP32WebSocket({
         const command = event.data.trim() as ESP32Command;
         console.log('[ESP32] Command received:', command);
         addLog('in', `← ${command}`);
+        
+        // Handle authentication responses
+        if (command === 'AUTH_SUCCESS') {
+          setAuthStatus('success');
+        } else if (command === 'AUTH_FAILED') {
+          setAuthStatus('failed');
+        }
         
         // Check if command needs debouncing
         if (DEBOUNCED_COMMANDS.has(command)) {
@@ -118,7 +127,7 @@ export function useESP32WebSocket({
       console.error('[ESP32] Connection error:', err);
       addLog('in', `✖ ERROR: ${err}`);
     }
-  }, [enabled, esp32Url, setConnected, addLog]);
+  }, [enabled, esp32Url, setConnected, addLog, setAuthStatus]);
 
   // Send message to ESP32 (for state sync/LED feedback)
   const sendToESP32 = useCallback((message: string) => {

@@ -145,6 +145,77 @@
     animation: none;
   }
 
+  // Authenticating state
+  &.state-authenticating .corner {
+    border-color: #ffaa00;
+    animation: pulse-border-auth 1s ease-in-out infinite;
+  }
+
+  // Auth success state
+  &.state-auth_success .corner {
+    border-color: #00ff88;
+  }
+
+  // Auth failed state
+  &.state-auth_failed .corner {
+    border-color: #ff4444;
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Auth Countdown
+  // ─────────────────────────────────────────────────────────────
+  .auth-countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .auth-timer {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 170, 0, 0.2);
+      border: 3px solid #ffaa00;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: pulse-auth 1s ease-in-out infinite;
+
+      .timer-icon {
+        font-size: 1.5rem;
+      }
+
+      .timer-value {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ffaa00;
+      }
+    }
+
+    .auth-cancel-btn {
+      padding: 0.5rem 1.5rem;
+      background: rgba(255, 68, 68, 0.2);
+      border: 1px solid #ff4444;
+      border-radius: 4px;
+      color: #ff4444;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 68, 68, 0.4);
+      }
+    }
+  }
+
   // ─────────────────────────────────────────────────────────────
   // Status Text
   // ─────────────────────────────────────────────────────────────
@@ -158,6 +229,21 @@
   }
 
   &.state-error .status-text {
+    color: #ff4444;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+  }
+
+  &.state-authenticating .status-text {
+    color: #ffaa00;
+    text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+  }
+
+  &.state-auth_success .status-text {
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  }
+
+  &.state-auth_failed .status-text {
     color: #ff4444;
     text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
   }
@@ -321,6 +407,28 @@
     100% {
       transform: translateY(0);
       opacity: 1;
+    }
+  }
+
+  @keyframes pulse-border-auth {
+    0%,
+    100% {
+      border-color: #ffaa00;
+      opacity: 1;
+    }
+    50% {
+      border-color: #ff8800;
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes pulse-auth {
+    0%,
+    100% {
+      box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
     }
   }
 }

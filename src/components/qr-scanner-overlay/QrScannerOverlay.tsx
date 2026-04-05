@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { UpiQrData } from "../../lib/upi-qr-parser";
 import "./qr-scanner-overlay.scss";
 
@@ -7,58 +7,116 @@ export type OverlayState =
   | { state: "scanning" }
   | { state: "detected" }
   | { state: "success"; upiData: UpiQrData }
+  | { state: "authenticating"; upiData: UpiQrData; onCancel: () => void }
+  | { state: "auth_success"; upiData: UpiQrData }
+  | { state: "auth_failed"; message: string }
   | { state: "error"; message: string };
 
-function QrScannerOverlayComponent(props: OverlayState) {
-  const { state } = props;
+function getMessage(props: OverlayState): string {
+  if (props.state === "auth_failed") return (props as { state: "auth_failed"; message: string }).message;
+  if (props.state === "error") return (props as { state: "error"; message: string }).message;
+  return "";
+}
 
-  if (state === "idle") {
+function getUpiData(props: OverlayState): UpiQrData | null {
+  if (props.state === "success") return (props as { state: "success"; upiData: UpiQrData }).upiData;
+  if (props.state === "authenticating") return (props as { state: "authenticating"; upiData: UpiQrData }).upiData;
+  if (props.state === "auth_success") return (props as { state: "auth_success"; upiData: UpiQrData }).upiData;
+  return null;
+}
+
+function getOnCancel(props: OverlayState): (() => void) | null {
+  if (props.state === "authenticating") return (props as { state: "authenticating"; onCancel: () => void }).onCancel;
+  return null;
+}
+
+function QrScannerOverlayComponent(props: OverlayState) {
+  const s = props.state;
+
+  if (s === "idle") {
     return null;
   }
 
+  const isSuccessState = s === "detected" || s === "success" || s === "auth_success";
+  const isErrorState = s === "error" || s === "auth_failed";
+  const upiData = getUpiData(props);
+  const message = getMessage(props);
+  const onCancel = getOnCancel(props);
+
   return (
-    <div className={`qr-scanner-overlay state-${state}`}>
+    <div className={`qr-scanner-overlay state-${s}`}>
       <div className="overlay-backdrop" />
 
       <div className="scanner-container">
-        {/* Scanner Frame with animated corners */}
         <div className="scanner-frame">
           <div className="corner top-left" />
           <div className="corner top-right" />
           <div className="corner bottom-left" />
           <div className="corner bottom-right" />
 
-          {/* Scanning line animation */}
-          {state === "scanning" && <div className="scan-line" />}
+          {s === "scanning" && <div className="scan-line" />}
 
-          {/* Success checkmark */}
-          {(state === "detected" || state === "success") && (
-            <div className="success-indicator">
-              <span className="checkmark">✓</span>
+          {isSuccessState && (
+            <div className={`success-indicator ${s === "auth_success" ? "auth-success" : ""}`}>
+              <span className="checkmark">{s === "auth_success" ? "🔐" : "✓"}</span>
             </div>
           )}
 
-          {/* Error indicator */}
-          {state === "error" && (
+          {s === "authenticating" && upiData && onCancel && (
+            <AuthCountdown upiData={upiData} onCancel={onCancel} />
+          )}
+
+          {isErrorState && (
             <div className="error-indicator">
               <span className="error-x">✕</span>
             </div>
           )}
         </div>
 
-        {/* Status text */}
         <div className="status-text">
-          {state === "scanning" && "Scanning for QR code..."}
-          {state === "detected" && "QR Code Detected!"}
-          {state === "success" && "Payment Ready"}
-          {state === "error" && (props as { state: "error"; message: string }).message}
+          {s === "scanning" && "Scanning for QR code..."}
+          {s === "detected" && "QR Code Detected!"}
+          {s === "success" && "Payment Ready"}
+          {s === "authenticating" && "Verifying Authentication..."}
+          {s === "auth_success" && "Authentication Confirmed"}
+          {s === "auth_failed" && message}
+          {s === "error" && message}
         </div>
 
-        {/* UPI Info Card */}
-        {state === "success" && (
-          <UpiInfoCard upiData={(props as { state: "success"; upiData: UpiQrData }).upiData} />
+        {upiData && (
+          <UpiInfoCard upiData={upiData} />
         )}
       </div>
+    </div>
+  );
+}
+
+function AuthCountdown({ upiData, onCancel }: { upiData: UpiQrData; onCancel: () => void }) {
+  const [remainingSecs, setRemainingSecs] = useState(30);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingSecs(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="auth-countdown">
+      <div className="auth-timer">
+        <span className="timer-icon">⏱️</span>
+        <span className="timer-value">{remainingSecs}s</span>
+      </div>
+      <button className="auth-cancel-btn" onClick={onCancel}>
+        Cancel
+      </button>
     </div>
   );
 }

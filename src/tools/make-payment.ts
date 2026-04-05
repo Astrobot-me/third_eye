@@ -5,6 +5,14 @@ import { tts } from "../lib/tts-feedback";
 import { OverlayState } from "../components/qr-scanner-overlay/QrScannerOverlay";
 import { paymentHistory } from "../lib/payment-history-store";
 
+interface Esp32Deps {
+  isConnected: boolean;
+  sendToESP32: (message: string) => void;
+  authStatus: 'idle' | 'pending' | 'success' | 'failed';
+  setAuthStatus: (status: 'idle' | 'pending' | 'success' | 'failed') => void;
+  clearAuthStatus: () => void;
+}
+
 /**
  * Combined make_payment tool declaration.
  * Orchestrates QR scanning and UPI payment in one step.
@@ -56,7 +64,8 @@ type SendResponseFn = (
  */
 export function createMakePaymentHandler(
   videoElement: HTMLVideoElement | null,
-  setOverlayState: (state: OverlayState) => void
+  setOverlayState: (state: OverlayState) => void,
+  esp32Deps: Esp32Deps
 ) {
   // We use the QR scanner with feedback for the scanning step
   const qrHandler = createQrScannerWithFeedback(videoElement, setOverlayState);
@@ -153,9 +162,7 @@ export function createMakePaymentHandler(
       // Step 5: Determine final amount
       const finalAmount = args.amount || upi.am;
 
-      // Step 6: Generate payment URL and open app
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Let user hear the info
-
+      // Step 6: Generate payment URL
       tts.openingApp();
 
       // Update note if provided
@@ -175,6 +182,93 @@ export function createMakePaymentHandler(
         deepLink: paymentUrl,
         note: args.note,
       });
+
+      // Step 7: ESP32 Authentication (if connected)
+      if (esp32Deps.isConnected) {
+        let authCancelled = false;
+        let authResolved = false;
+
+        // Reset and set pending auth status
+        esp32Deps.clearAuthStatus();
+        esp32Deps.setAuthStatus('pending');
+        esp32Deps.sendToESP32("ASK_AUTH_VERIFY");
+
+        // Show authenticating overlay with cancel
+        const authResult = await new Promise<'success' | 'failed' | 'cancelled'>((resolve) => {
+          const cancelHandler = () => {
+            if (authResolved) return;
+            authCancelled = true;
+            esp32Deps.setAuthStatus('idle');
+            setOverlayState({ state: "idle" });
+            resolve('cancelled');
+          };
+
+          setOverlayState({ 
+            state: "authenticating", 
+            upiData: upi, 
+            onCancel: cancelHandler 
+          });
+
+          // Poll for auth status changes
+          const pollInterval = setInterval(() => {
+            if (authCancelled || authResolved) {
+              clearInterval(pollInterval);
+              return;
+            }
+
+            const status = esp32Deps.authStatus;
+            if (status === 'success') {
+              authResolved = true;
+              clearInterval(pollInterval);
+              setOverlayState({ state: "auth_success", upiData: upi });
+              esp32Deps.setAuthStatus('idle');
+              resolve('success');
+            } else if (status === 'failed') {
+              authResolved = true;
+              clearInterval(pollInterval);
+              setOverlayState({ state: "auth_failed", message: "Biometric verification denied" });
+              esp32Deps.setAuthStatus('idle');
+              resolve('failed');
+            }
+          }, 200);
+
+          // Timeout after 30 seconds
+          setTimeout(() => {
+            if (!authResolved && !authCancelled) {
+              authResolved = true;
+              clearInterval(pollInterval);
+              setOverlayState({ state: "auth_failed", message: "Authentication timed out" });
+              esp32Deps.setAuthStatus('idle');
+              resolve('failed');
+            }
+          }, 30000);
+        });
+
+        // Handle auth result
+        if (authResult === 'cancelled' || authResult === 'failed') {
+          paymentHistory.logError(
+            authResult === 'cancelled' ? "Authentication cancelled by user" : "Authentication failed",
+            "make_payment"
+          );
+
+          sendResponse([
+            {
+              response: {
+                output: {
+                  success: false,
+                  error: authResult === 'cancelled' ? "Payment cancelled" : "Authentication failed",
+                },
+              },
+              id: toolId,
+              name: toolName,
+            },
+          ]);
+          return;
+        }
+
+        // Auth succeeded - proceed with payment after brief delay
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+      }
 
       // Open payment app
       window.location.href = paymentUrl;

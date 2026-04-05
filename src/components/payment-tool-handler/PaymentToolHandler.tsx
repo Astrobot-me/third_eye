@@ -4,6 +4,7 @@
  */
 import { useEffect, useRef, memo } from "react";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
+import { useEsp32Context } from "../../contexts/Esp32Context";
 import { LiveServerToolCall } from "@google/genai";
 import { createQrScannerWithFeedback } from "../../tools/qr-scanner-with-feedback";
 import { createMakePaymentHandler } from "../../tools/make-payment";
@@ -23,6 +24,15 @@ function PaymentToolHandlerComponent({
   setOverlayState,
 }: PaymentToolHandlerProps) {
   const { client } = useLiveAPIContext();
+  const { isConnected, sendToESP32, authStatus, setAuthStatus, clearAuthStatus } = useEsp32Context();
+
+  const esp32Deps = {
+    isConnected,
+    sendToESP32,
+    authStatus,
+    setAuthStatus,
+    clearAuthStatus,
+  };
 
   // Store handlers in refs to avoid recreating on every render
   const handlersRef = useRef<{
@@ -46,7 +56,8 @@ function PaymentToolHandlerComponent({
     handlersRef.current.upi = createUpiPaymentHandler();
     handlersRef.current.payment = createMakePaymentHandler(
       videoRef.current,
-      setOverlayState
+      setOverlayState,
+      esp32Deps
     );
 
     // Capture refs for cleanup
@@ -55,7 +66,7 @@ function PaymentToolHandlerComponent({
       handlers.qr?.cleanup();
       handlers.payment?.cleanup();
     };
-  }, [videoRef, setOverlayState]);
+  }, [videoRef, setOverlayState, esp32Deps]);
 
   // Listen for tool calls
   useEffect(() => {
