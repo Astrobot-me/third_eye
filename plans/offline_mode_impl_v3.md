@@ -1,4 +1,4 @@
-﻿# Offline Mode Implementation Plan v2
+﻿# Offline Mode Implementation Plan v3
 
 ## Goal
 Add a third operational mode called "offline" that uses the local YOLO worker instead of Gemini for obstacle detection and guidance.
@@ -46,12 +46,17 @@ export type UseLiveAPIResults = {
 };
 ```
 
-3. Create `setMode()` function that handles reconnection:
+3. Rename useState setter to avoid collision, then create `setMode()` function:
 ```typescript
+// Rename the useState setter to avoid collision with the exposed setMode function
+const [modeState, setModeInternal] = useState<AppMode>('passive');
+
+// Create the async setMode() that handles reconnection
 const setMode = useCallback(async (newMode: AppMode) => {
-  if (newMode === mode) return;  // No-op if same mode
+  if (newMode === modeState) return;  // No-op if same mode
   
   const wasConnected = connected;
+  const previousMode = modeState;
   
   // Disconnect from Gemini if switching TO offline
   if (newMode === 'offline' && wasConnected) {
@@ -59,10 +64,10 @@ const setMode = useCallback(async (newMode: AppMode) => {
     setConnected(false);
   }
   
-  setModeState(newMode);
+  setModeInternal(newMode);
   
   // Reconnect to Gemini if switching FROM offline to online mode
-  if (mode === 'offline' && newMode !== 'offline' && wasConnected) {
+  if (previousMode === 'offline' && newMode !== 'offline' && wasConnected) {
     const finalConfig = buildConfigForMode(config, newMode);
     await client.connect(model, finalConfig);
   }
@@ -72,7 +77,15 @@ const setMode = useCallback(async (newMode: AppMode) => {
     client.disconnect();
     await client.connect(model, finalConfig);
   }
-}, [mode, connected, config, model, client, buildConfigForMode]);
+}, [modeState, connected, config, model, client, buildConfigForMode]);
+
+// In return statement, expose modeState as 'mode':
+return {
+  // ...
+  mode: modeState,  // Expose internal state as 'mode'
+  setMode,          // Expose the async handler
+  toggleMode,
+};
 ```
 
 4. Update `toggleMode()` to cycle through 3 modes:
@@ -83,8 +96,8 @@ const toggleMode = useCallback(async () => {
     'active': 'offline',
     'offline': 'passive'
   };
-  await setMode(nextMode[mode]);
-}, [mode, setMode]);
+  await setMode(nextMode[modeState]);
+}, [modeState, setMode]);
 ```
 
 5. Update `buildConfigForMode()` to handle offline (return null/skip):
@@ -127,7 +140,7 @@ interface Detection {
 interface DetectionResult {
   detections: Detection[];
   alert_message: string | null;
-  processing_time_ms: number;
+  // Note: Worker returns only detections + alert_message, no processing_time
 }
 
 interface UseOfflineDetectionOptions {
@@ -343,19 +356,21 @@ useEffect(() => {
 
 6. **Update mode toggle button** to show 3 states:
 ```typescript
-const getModeIcon = () => {
+const getModeIcon = (): string => {
   switch (mode) {
     case 'passive': return 'visibility_off';
     case 'active': return 'visibility';
     case 'offline': return 'wifi_off';
+    default: return 'visibility_off';
   }
 };
 
-const getModeLabel = () => {
+const getModeLabel = (): string => {
   switch (mode) {
     case 'passive': return 'Passive';
     case 'active': return 'Active';
     case 'offline': return 'Offline';
+    default: return 'Passive';
   }
 };
 
@@ -473,6 +488,29 @@ Add section for offline mode with:
 - YOLO worker requirements
 - Web Speech API usage
 - Frame rate and detection details
+
+---
+
+### Phase 10 (Optional): Detection Overlay UI
+**File:** `src/components/detection-overlay/DetectionOverlay.tsx` (NEW)
+
+Optional visual overlay showing bounding boxes on video:
+```typescript
+// Only show when mode === 'offline' && offlineDetection.lastResult
+// Render bounding boxes from lastResult.detections on canvas overlay
+// Color-code by danger_level: safe=green, caution=yellow, danger=red
+```
+
+This phase is optional and can be added later for debugging/demo purposes.
+
+---
+
+## Error Handling Notes
+
+1. **Worker not running**: Hook sets `error: 'YOLO worker not running'` and `isConnected: false`
+2. **Detection failure**: Returns empty detections, logs error, continues operation
+3. **Web Speech API unavailable**: Silently fails (speechSynthesis check should be added)
+4. **Mode switch during detection**: Safe - async operations complete independently
 
 ---
 

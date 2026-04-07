@@ -23,7 +23,7 @@ import VolMeterWorket from "../lib/worklets/vol-meter";
 import { LiveConnectConfig, Modality } from "@google/genai";
 import { ACTIVE_MODE_SYSTEM_PROMPT, PASSIVE_MODE_SYSTEM_PROMPT } from "../lib/active-mode-prompt";
 
-export type AppMode = 'passive' | 'active';
+export type AppMode = 'passive' | 'active' | 'offline';
 
 export type UseLiveAPIResults = {
   client: GenAILiveClient;
@@ -35,9 +35,10 @@ export type UseLiveAPIResults = {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   volume: number;
-  // New mode properties
+  // Mode properties
   mode: AppMode;
-  toggleMode: () => Promise<void>;
+  setMode: (mode: AppMode) => Promise<void>;  // Explicit mode setter
+  toggleMode: () => Promise<void>;  // Cycles through all 3 modes
 };
 
 export function useLiveAPI(options: LiveClientOptions): UseLiveAPIResults {
@@ -48,10 +49,15 @@ export function useLiveAPI(options: LiveClientOptions): UseLiveAPIResults {
   const [config, setConfig] = useState<LiveConnectConfig>({});
   const [connected, setConnected] = useState(false);
   const [volume, setVolume] = useState(0);
-  const [mode, setMode] = useState<AppMode>('passive');
+  const [modeState, setModeInternal] = useState<AppMode>('passive');
 
   // Build config based on mode - preserves tools from baseConfig, overwrites systemInstruction
-  const buildConfigForMode = useCallback((baseConfig: LiveConnectConfig, targetMode: AppMode): LiveConnectConfig => {
+  const buildConfigForMode = useCallback((baseConfig: LiveConnectConfig, targetMode: AppMode): LiveConnectConfig | null => {
+    // No Gemini config needed for offline mode
+    if (targetMode === 'offline') {
+      return null;
+    }
+    
     const systemPrompt = targetMode === 'active' 
       ? ACTIVE_MODE_SYSTEM_PROMPT 
       : PASSIVE_MODE_SYSTEM_PROMPT;
@@ -139,38 +145,77 @@ export function useLiveAPI(options: LiveClientOptions): UseLiveAPIResults {
   }, [client]);
 
   const connect = useCallback(async () => {
+    // In offline mode, don't connect to Gemini
+    if (modeState === 'offline') {
+      return;
+    }
     if (!config) {
       throw new Error("config has not been set");
     }
-    const finalConfig = buildConfigForMode(config, mode);
+    const finalConfig = buildConfigForMode(config, modeState);
+    if (!finalConfig) {
+      return; // Shouldn't happen since we check for offline above
+    }
     client.disconnect();
     await client.connect(model, finalConfig);
-  }, [client, config, model, mode, buildConfigForMode]);
+  }, [client, config, model, modeState, buildConfigForMode]);
 
   const disconnect = useCallback(async () => {
     client.disconnect();
     setConnected(false);
   }, [setConnected, client]);
 
-  // Toggle mode with automatic reconnect
-  const toggleMode = useCallback(async () => {
-    const newMode = mode === 'passive' ? 'active' : 'passive';
-    const wasConnected = connected;  // Capture before state change
+  // Explicit mode setter with automatic reconnection handling
+  const setMode = useCallback(async (newMode: AppMode) => {
+    if (newMode === modeState) return;  // No-op if same mode
     
-    setMode(newMode);
+    const wasConnected = connected;
+    const previousMode = modeState;
     
-    // If was connected, reconnect with new mode config
-    if (wasConnected) {
-      const finalConfig = buildConfigForMode(config, newMode);
+    // Disconnect from Gemini if switching TO offline
+    if (newMode === 'offline' && wasConnected) {
       client.disconnect();
-      try {
-        await client.connect(model, finalConfig);
-      } catch (e) {
-        console.error("Failed to reconnect after mode switch:", e);
-        setMode(mode);  // Revert mode on failure
+      setConnected(false);
+    }
+    
+    setModeInternal(newMode);
+    
+    // Reconnect to Gemini if switching FROM offline to online mode
+    if (previousMode === 'offline' && newMode !== 'offline' && wasConnected) {
+      const finalConfig = buildConfigForMode(config, newMode);
+      if (finalConfig) {
+        try {
+          await client.connect(model, finalConfig);
+        } catch (e) {
+          console.error("Failed to reconnect after mode switch:", e);
+          setModeInternal(previousMode);  // Revert mode on failure
+        }
       }
     }
-  }, [mode, connected, config, model, client, buildConfigForMode]);
+    // If switching between passive/active while connected, reconnect with new config
+    else if (wasConnected && newMode !== 'offline') {
+      const finalConfig = buildConfigForMode(config, newMode);
+      if (finalConfig) {
+        client.disconnect();
+        try {
+          await client.connect(model, finalConfig);
+        } catch (e) {
+          console.error("Failed to reconnect after mode switch:", e);
+          setModeInternal(previousMode);  // Revert mode on failure
+        }
+      }
+    }
+  }, [modeState, connected, config, model, client, buildConfigForMode]);
+
+  // Toggle mode cycles through all 3 modes: passive -> active -> offline -> passive
+  const toggleMode = useCallback(async () => {
+    const nextMode: Record<AppMode, AppMode> = {
+      'passive': 'active',
+      'active': 'offline',
+      'offline': 'passive'
+    };
+    await setMode(nextMode[modeState]);
+  }, [modeState, setMode]);
 
   return {
     client,
@@ -182,7 +227,8 @@ export function useLiveAPI(options: LiveClientOptions): UseLiveAPIResults {
     connect,
     disconnect,
     volume,
-    mode,
+    mode: modeState,
+    setMode,
     toggleMode,
   };
 }

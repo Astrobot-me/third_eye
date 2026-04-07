@@ -1,17 +1,18 @@
 # Third Eye Application Modes
 
-This document describes the two operational modes in the Third Eye smart glasses application.
+This document describes the three operational modes in the Third Eye smart glasses application.
 
 ---
 
 ## Overview
 
-The application supports two modes designed for different use cases for blind users:
+The application supports three modes designed for different use cases for blind users:
 
 | Mode | Purpose | Video Streaming | AI Behavior |
 |------|---------|-----------------|-------------|
-| **Passive** | On-demand assistance | User-activated only | Responds when spoken to |
-| **Active** | Continuous awareness | Auto-streams + narrates | Proactive environmental description |
+| **Passive** | On-demand assistance | User-activated only | Responds when spoken to (Gemini) |
+| **Active** | Continuous awareness | Auto-streams + narrates | Proactive environmental description (Gemini) |
+| **Offline** | No internet required | Streams to local YOLO | Object detection with Web Speech TTS |
 
 ---
 
@@ -174,19 +175,144 @@ The `buildConfigForMode()` function in `use-live-api.ts`:
 
 | File | Purpose |
 |------|---------|
-| `src/lib/active-mode-prompt.ts` | System prompts for both modes |
-| `src/hooks/use-live-api.ts` | Mode state, toggle logic, config building |
-| `src/components/control-tray/ControlTray.tsx` | UI toggle, active mode trigger loop |
+| `src/lib/active-mode-prompt.ts` | System prompts for passive/active modes |
+| `src/hooks/use-live-api.ts` | Mode state, setMode(), toggleMode(), config building |
+| `src/hooks/use-offline-detection.ts` | YOLO worker communication for offline mode |
+| `src/components/control-tray/ControlTray.tsx` | UI toggle, active mode trigger, offline frame sending |
 | `src/hooks/use-esp32-websocket.ts` | Hardware mode switching commands |
+
+---
+
+## 3. Offline Mode
+
+### Description
+Local object detection using YOLO without internet. Does not connect to Gemini.
+
+### Behavior
+- Disconnects from Gemini when entering offline mode
+- Sends video frames to local YOLO worker at `localhost:8765`
+- Uses Web Speech API for TTS alerts (browser-based)
+- Detects objects and classifies danger level (safe, caution, danger)
+- 3-second cooldown between repeated alerts
+
+### Use Case
+- No internet connectivity
+- Privacy-sensitive environments
+- Faster response time for obstacle detection
+- Lower latency for safety-critical alerts
+
+### Requirements
+- YOLO worker running at `http://localhost:8765`
+- Install: `pip install fastapi uvicorn opencv-python ultralytics pywin32`
+- Run: `python offline_mode/third_eye_worker.py`
+
+### Technical Details
+
+**Worker Endpoints:**
+- `GET /health` - Health check (polled every 5 seconds)
+- `POST /detect` - Send frame, receive detections
+
+**Detection Response:**
+```json
+{
+  "detections": [
+    {
+      "label": "person",
+      "confidence": 0.85,
+      "bbox": [x1, y1, x2, y2],
+      "danger_level": "caution"
+    }
+  ],
+  "alert_message": "Person ahead, caution"
+}
+```
+
+**Web Speech TTS:**
+```typescript
+const utterance = new SpeechSynthesisUtterance(alertMessage);
+utterance.rate = 1.2;  // Slightly faster for alerts
+speechSynthesis.speak(utterance);
+```
+
+### Frame Sending (from `ControlTray.tsx`)
+```typescript
+useEffect(() => {
+  if (mode !== 'offline' || !activeVideoStream || !offlineDetection.isConnected) {
+    return;
+  }
+
+  const sendFrameToWorker = () => {
+    // Draw video frame to canvas, convert to base64 JPEG
+    const imageData = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+    offlineDetection.sendFrame(imageData);
+  };
+
+  // Send frames at 0.5 FPS (every 2 seconds)
+  const intervalId = setInterval(sendFrameToWorker, 2000);
+  return () => clearInterval(intervalId);
+}, [mode, activeVideoStream, offlineDetection]);
+```
+
+---
+
+## Mode Switching
+
+### UI Toggle
+- Located in ControlTray component
+- Cycles: passive → active → offline → passive
+- Icons: visibility_off (passive) → visibility (active) → wifi_off (offline)
+
+### Implementation (`use-live-api.ts`)
+```typescript
+// Explicit mode setter
+const setMode = useCallback(async (newMode: AppMode) => {
+  if (newMode === modeState) return;
+  
+  const wasConnected = connected;
+  const previousMode = modeState;
+  
+  // Disconnect from Gemini if switching TO offline
+  if (newMode === 'offline' && wasConnected) {
+    client.disconnect();
+    setConnected(false);
+  }
+  
+  setModeInternal(newMode);
+  
+  // Reconnect to Gemini if switching FROM offline
+  if (previousMode === 'offline' && newMode !== 'offline' && wasConnected) {
+    await client.connect(model, buildConfigForMode(config, newMode));
+  }
+}, [modeState, connected, ...]);
+
+// Toggle cycles through all 3 modes
+const toggleMode = useCallback(async () => {
+  const nextMode = { passive: 'active', active: 'offline', offline: 'passive' };
+  await setMode(nextMode[modeState]);
+}, [modeState, setMode]);
+```
+
+### ESP32 Hardware Control
+Commands supported via WebSocket:
+- `MODE_ACTIVE` - Switch to active mode
+- `MODE_PASSIVE` - Switch to passive mode
+- `MODE_OFFLINE` - Switch to offline mode
+- `TOGGLE_MODE` - Cycle through all 3 modes
+
+**Note:** 300ms debounce applied to mode commands to prevent race conditions.
 
 ---
 
 ## Testing Checklist
 
 - [ ] App starts in passive mode by default
-- [ ] Mode toggle button switches modes
+- [ ] Mode toggle button cycles: passive → active → offline → passive
+- [ ] StatusBar shows 3 mode buttons
 - [ ] Reconnection happens automatically on mode switch
 - [ ] Active mode sends [DESCRIBE] every 4 seconds
 - [ ] Passive mode only responds when user speaks
+- [ ] Offline mode disconnects from Gemini
+- [ ] Offline mode connects to YOLO worker
+- [ ] Offline mode alerts spoken via Web Speech API
 - [ ] ESP32 mode commands work with 300ms debounce
 - [ ] Video streaming respects mode settings
