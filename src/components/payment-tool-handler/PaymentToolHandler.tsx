@@ -24,12 +24,13 @@ function PaymentToolHandlerComponent({
   setOverlayState,
 }: PaymentToolHandlerProps) {
   const { client } = useLiveAPIContext();
-  const { isConnected, sendToESP32, authStatus, setAuthStatus, clearAuthStatus } = useEsp32Context();
+  const { isConnected, sendToESP32, authStatusRef, setAuthStatus, clearAuthStatus } = useEsp32Context();
 
+  // Build esp32Deps with getter function to avoid stale closure in polling
   const esp32Deps = {
     isConnected,
     sendToESP32,
-    authStatus,
+    getAuthStatus: () => authStatusRef.current,  // Always returns current value
     setAuthStatus,
     clearAuthStatus,
   };
