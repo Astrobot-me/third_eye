@@ -192,6 +192,44 @@
       pointer-events: none;
     }
   }
+
+  &.offline {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 152, 0, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: mode-pulse 2s infinite;
+      pointer-events: none;
+    }
+  }
+}
+
+// Offline worker status indicator
+.offline-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 152, 0, 0.2);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  
+  &.connected {
+    background: rgba(76, 175, 80, 0.2);
+  }
+  
+  &.error {
+    background: rgba(244, 67, 54, 0.2);
+  }
 }
 
 @keyframes mode-pulse {

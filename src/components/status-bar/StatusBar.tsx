@@ -2,13 +2,7 @@ import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import "./status-bar.scss";
 
 export function StatusBar() {
-  const { mode, toggleMode } = useLiveAPIContext();
-
-  const handleModeToggle = async (targetMode: "passive" | "active") => {
-    if (mode !== targetMode) {
-      await toggleMode();
-    }
-  };
+  const { mode, setMode } = useLiveAPIContext();
 
   return (
     <div className="status-bar">
@@ -19,7 +13,7 @@ export function StatusBar() {
             className={`status-bar__toggle-btn ${
               mode === "active" ? "status-bar__toggle-btn--active" : ""
             }`}
-            onClick={() => handleModeToggle("active")}
+            onClick={() => setMode("active")}
             aria-pressed={mode === "active"}
           >
             ACTIVE
@@ -28,10 +22,19 @@ export function StatusBar() {
             className={`status-bar__toggle-btn ${
               mode === "passive" ? "status-bar__toggle-btn--active" : ""
             }`}
-            onClick={() => handleModeToggle("passive")}
+            onClick={() => setMode("passive")}
             aria-pressed={mode === "passive"}
           >
             PASSIVE
+          </button>
+          <button
+            className={`status-bar__toggle-btn ${
+              mode === "offline" ? "status-bar__toggle-btn--active" : ""
+            }`}
+            onClick={() => setMode("offline")}
+            aria-pressed={mode === "offline"}
+          >
+            OFFLINE
           </button>
         </div>
       </div>

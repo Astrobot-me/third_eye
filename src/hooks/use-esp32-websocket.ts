@@ -5,7 +5,7 @@
  * Commands received from ESP32:
  * - TOGGLE_MUTE, MUTE_ON, MUTE_OFF
  * - CONNECT, DISCONNECT, TOGGLE_CONNECT
- * - MODE_ACTIVE, MODE_PASSIVE, TOGGLE_MODE
+ * - MODE_ACTIVE, MODE_PASSIVE, MODE_OFFLINE, TOGGLE_MODE
  * - WEBCAM_ON, WEBCAM_OFF
  * - PTT_START, PTT_STOP
  */
@@ -16,7 +16,7 @@ import { useEsp32Context } from '../contexts/Esp32Context';
 export type ESP32Command = 
   | 'TOGGLE_MUTE' | 'MUTE_ON' | 'MUTE_OFF'
   | 'CONNECT' | 'DISCONNECT' | 'TOGGLE_CONNECT'
-  | 'MODE_ACTIVE' | 'MODE_PASSIVE' | 'TOGGLE_MODE'
+  | 'MODE_ACTIVE' | 'MODE_PASSIVE' | 'MODE_OFFLINE' | 'TOGGLE_MODE'
   | 'WEBCAM_ON' | 'WEBCAM_OFF'
   | 'PTT_START' | 'PTT_STOP'
   | 'AUTH_SUCCESS'
@@ -36,7 +36,7 @@ interface UseESP32WebSocketReturn {
 const MODE_DEBOUNCE_MS = 300;
 
 // Commands that need debouncing
-const DEBOUNCED_COMMANDS = new Set(['MODE_ACTIVE', 'MODE_PASSIVE', 'TOGGLE_MODE']);
+const DEBOUNCED_COMMANDS = new Set(['MODE_ACTIVE', 'MODE_PASSIVE', 'MODE_OFFLINE', 'TOGGLE_MODE']);
 
 export function useESP32WebSocket({ 
   onCommand, 

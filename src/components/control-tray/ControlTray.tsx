@@ -22,6 +22,7 @@ import { UseMediaStreamResult } from "../../hooks/use-media-stream-mux";
 import { useScreenCapture } from "../../hooks/use-screen-capture";
 import { useWebcam } from "../../hooks/use-webcam";
 import { useESP32WebSocket, ESP32Command } from "../../hooks/use-esp32-websocket";
+import { useOfflineDetection } from "../../hooks/use-offline-detection";
 import { AudioRecorder } from "../../lib/audio-recorder";
 import { ACTIVE_MODE_TRIGGER_PROMPT } from "../../lib/active-mode-prompt";
 import AudioPulse from "../audio-pulse/AudioPulse";
@@ -89,8 +90,14 @@ function ControlTray({
   mutedRef.current = muted;
   pushToTalkActiveRef.current = pushToTalkActive;
 
-  const { client, connected, connect, disconnect, volume, mode, toggleMode } =
+  const { client, connected, connect, disconnect, volume, mode, setMode, toggleMode } =
     useLiveAPIContext();
+
+  // Offline detection hook - only enabled when in offline mode
+  const offlineDetection = useOfflineDetection({
+    enabled: mode === 'offline',
+    speakAlerts: true
+  });
 
   // ESP32 WebSocket command handler (wrapped in useCallback to prevent reconnects)
   const handleESP32Command = useCallback((command: ESP32Command) => {
@@ -120,15 +127,18 @@ function ControlTray({
         else connect();
         break;
         
-      // Mode controls (debounced in hook)
+      // Mode controls - use explicit setMode() for 3-mode support
       case 'MODE_ACTIVE':
-        if (mode !== 'active') toggleMode();
+        if (mode !== 'active') setMode('active');
         break;
       case 'MODE_PASSIVE':
-        if (mode !== 'passive') toggleMode();
+        if (mode !== 'passive') setMode('passive');
+        break;
+      case 'MODE_OFFLINE':
+        if (mode !== 'offline') setMode('offline');
         break;
       case 'TOGGLE_MODE':
-        toggleMode();
+        toggleMode();  // Cycles through all 3 modes
         break;
         
       // Push-to-talk controls
@@ -147,7 +157,7 @@ function ControlTray({
         // Will be handled in useEffect below
         break;
     }
-  }, [connected, connect, disconnect, mode, toggleMode]);
+  }, [connected, connect, disconnect, mode, setMode, toggleMode]);
 
   // Handle webcam commands from ESP32 via state
   const [esp32WebcamCommand, setESP32WebcamCommand] = useState<'on' | 'off' | null>(null);
@@ -322,11 +332,13 @@ function ControlTray({
     // - In active mode: always send when connected with video stream
     // - In passive mode: only send when video stream is explicitly active AND user has enabled it
     // Note: The existing logic already handles when video streams are active via the hooks
+    // Only send to Gemini if NOT in offline mode
     // In passive mode, we rely on the user manually activating streams via the UI
-    if (connected && activeVideoStream !== null) {
+    if (connected && activeVideoStream !== null && mode !== 'offline') {
       // In active mode: always stream when we have a stream
       // In passive mode: we still send frames when there's a stream (user-activated)
       // The difference is that in passive mode, streams aren't auto-activated
+      // In offline mode: frames go to YOLO worker instead (handled in separate effect)
       requestAnimationFrame(sendVideoFrame);
     }
     
@@ -357,6 +369,42 @@ function ControlTray({
       clearInterval(intervalId);
     };
   }, [connected, mode, activeVideoStream, client]);
+
+  // Offline mode frame sending - sends frames to YOLO worker instead of Gemini
+  useEffect(() => {
+    if (mode !== 'offline' || !activeVideoStream || !offlineDetection.isConnected) {
+      return;
+    }
+
+    const sendFrameToWorker = () => {
+      const canvas = renderCanvasRef.current;
+      const video = videoRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (!canvas || !ctx || !video) return;
+
+      // Draw current video frame to canvas
+      canvas.width = video.videoWidth * 0.25;
+      canvas.height = video.videoHeight * 0.25;
+      if (canvas.width + canvas.height > 0) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Convert to base64 JPEG (without data URL prefix)
+        const base64 = canvas.toDataURL('image/jpeg', 0.8);
+        const imageData = base64.slice(base64.indexOf(',') + 1);
+        
+        // Send to YOLO worker
+        offlineDetection.sendFrame(imageData);
+      }
+    };
+
+    // Send frames at 0.5 FPS (every 2 seconds) - same as active mode
+    const intervalId = setInterval(sendFrameToWorker, 2000);
+    
+    // Send initial frame
+    sendFrameToWorker();
+
+    return () => clearInterval(intervalId);
+  }, [mode, activeVideoStream, offlineDetection, videoRef]);
 
   //handler for swapping from one video-stream to the next
   const changeStreams = (next?: UseMediaStreamResult) => async () => {
@@ -409,15 +457,18 @@ function ControlTray({
             />
           </>
         )}
-        {/* Mode toggle button */}
+        {/* Mode toggle button - cycles through passive -> active -> offline */}
         <button
-          className={cn("action-button mode-toggle", { active: mode === 'active' })}
+          className={cn("action-button mode-toggle", { 
+            active: mode === 'active',
+            offline: mode === 'offline'
+          })}
           onClick={toggleMode}
-          aria-label={`Switch to ${mode === 'passive' ? 'active' : 'passive'} mode`}
-          title={mode === 'passive' ? 'Enable Active Mode' : 'Disable Active Mode'}
+          aria-label={`Current mode: ${mode}. Click to switch.`}
+          title={`Mode: ${mode}`}
         >
           <span className="material-symbols-outlined">
-            {mode === 'active' ? 'visibility' : 'visibility_off'}
+            {mode === 'active' ? 'visibility' : mode === 'offline' ? 'wifi_off' : 'visibility_off'}
           </span>
         </button>
         
