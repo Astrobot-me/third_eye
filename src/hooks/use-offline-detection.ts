@@ -8,14 +8,26 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 
 export interface Detection {
   label: string;
-  confidence: number;
-  bbox: [number, number, number, number];
-  danger_level: 'safe' | 'caution' | 'danger';
+  raw_label?: string;
+  position: 'left' | 'center' | 'right';
+  proximity: 'very close' | 'nearby' | '';
+  priority: 'danger' | 'warning' | 'normal';
+  navigate: string;
+  distance_m: number;
+  distance_label: string;
+  movement: 'approaching fast' | 'approaching' | 'moving away' | '';
+  count: number;
+  // Legacy fields for backward compatibility
+  confidence?: number;
+  bbox?: [number, number, number, number];
+  danger_level?: 'safe' | 'caution' | 'danger';
 }
 
 export interface DetectionResult {
   detections: Detection[];
   alert_message: string | null;
+  scene_summary?: string;
+  object_count?: number;
 }
 
 interface UseOfflineDetectionOptions {
