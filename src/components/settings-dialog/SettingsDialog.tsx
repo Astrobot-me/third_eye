@@ -7,6 +7,7 @@ import {
 } from "react";
 import "./settings-dialog.scss";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import VoiceSelector from "./VoiceSelector";
 import ResponseModalitySelector from "./ResponseModalitySelector";
 import { FunctionDeclaration, LiveConnectConfig, Tool } from "@google/genai";
@@ -18,6 +19,7 @@ type FunctionDeclarationsTool = Tool & {
 export default function SettingsDialog() {
   const [open, setOpen] = useState(false);
   const { config, setConfig, connected } = useLiveAPIContext();
+  const { theme, toggleTheme } = useTheme();
   const functionDeclarations: FunctionDeclaration[] = useMemo(() => {
     if (!Array.isArray(config.tools)) {
       return [];
@@ -109,6 +111,23 @@ export default function SettingsDialog() {
               </p>
             </div>
           )}
+
+          <div className="theme-toggle">
+            <span className="theme-label">Theme</span>
+            <button
+              className="theme-switch"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            >
+              <span className={`theme-option ${theme === "dark" ? "active" : ""}`}>
+                dark
+              </span>
+              <span className={`theme-option ${theme === "light" ? "active" : ""}`}>
+                light
+              </span>
+            </button>
+          </div>
+
           <div className="mode-selectors">
             <ResponseModalitySelector />
             <VoiceSelector />

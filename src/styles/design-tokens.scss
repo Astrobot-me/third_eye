@@ -67,6 +67,69 @@
   --on-surface: #dee5ff;                 // Primary text (soft white)
   --on-surface-variant: #a0a8c0;         // Secondary/muted text
   --on-surface-dim: #6b7394;             // Disabled/placeholder text
+
+  // Theme name for reference
+  --theme-name: "dark";
+}
+
+[data-theme="light"] {
+  // ---------------------------------------------------------------------------
+  // Surface Hierarchy - Light Mode
+  // ---------------------------------------------------------------------------
+  --surface: #f5f7fa;
+  --surface-container-low: #e8ecf1;
+  --surface-container: #ffffff;
+  --surface-container-high: #f0f2f5;
+  --surface-container-highest: #e4e8ec;
+  --surface-bright: #d4d9de;
+  --surface-variant: rgba(200, 206, 215, 0.6);
+  --surface-tint: rgba(0, 200, 140, 0.08);
+
+  // ---------------------------------------------------------------------------
+  // Primary Colors - Light Mode (slightly darker for contrast)
+  // ---------------------------------------------------------------------------
+  --primary: #00b880;
+  --primary-container: #00dcb0;
+  --on-primary: #ffffff;
+  --primary-dim: rgba(0, 184, 128, 0.6);
+
+  // ---------------------------------------------------------------------------
+  // Secondary Colors - Light Mode
+  // ---------------------------------------------------------------------------
+  --secondary: #0088cc;
+  --secondary-container: #e0f0f8;
+  --on-secondary: #ffffff;
+
+  // ---------------------------------------------------------------------------
+  // Tertiary Colors - Light Mode
+  // ---------------------------------------------------------------------------
+  --tertiary: #0088cc;
+  --tertiary-container: #e0f0f8;
+  --on-tertiary: #ffffff;
+
+  // ---------------------------------------------------------------------------
+  // Error States
+  // ---------------------------------------------------------------------------
+  --error: #e03c00;
+  --error-dim: #c9302c;
+  --error-container: rgba(224, 60, 0, 0.1);
+  --on-error: #ffffff;
+
+  // ---------------------------------------------------------------------------
+  // Outline & Borders - Light Mode
+  // ---------------------------------------------------------------------------
+  --outline: rgba(0, 120, 80, 0.3);
+  --outline-variant: rgba(180, 190, 200, 0.5);
+
+  // ---------------------------------------------------------------------------
+  // Text Colors - Light Mode (dark for contrast)
+  // ---------------------------------------------------------------------------
+  --on-surface: #1a1f2e;
+  --on-surface-variant: #4a5568;
+  --on-surface-dim: #8892a2;
+
+  // Theme name for reference
+  --theme-name: "light";
 }
 
 // =============================================================================
