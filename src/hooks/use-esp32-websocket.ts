@@ -46,7 +46,7 @@ export function useESP32WebSocket({
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const lastCommandTimeRef = useRef<Record<string, number>>({});
   
-  const { setConnected, addLog, setAuthStatus } = useEsp32Context();
+  const { setConnected, addLog, setAuthStatus, setSendFn } = useEsp32Context();
   
   // Store onCommand in ref to avoid reconnection on callback change
   const onCommandRef = useRef(onCommand);
@@ -135,8 +135,16 @@ export function useESP32WebSocket({
       wsRef.current.send(message);
       console.log('[ESP32] Sent:', message);
       addLog('out', `→ ${message}`);
+    } else {
+      console.warn('[ESP32] Cannot send - WebSocket not connected');
     }
   }, [addLog]);
+
+  // Register send function with context so other components can use it
+  useEffect(() => {
+    setSendFn(sendToESP32);
+    return () => setSendFn(null);
+  }, [sendToESP32, setSendFn]);
 
   // Connect on mount, cleanup on unmount
   useEffect(() => {

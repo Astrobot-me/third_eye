@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useRef, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useRef, ReactNode, MutableRefObject } from 'react';
 
 export interface Esp32LogEntry {
   id: string;
@@ -13,7 +13,9 @@ interface Esp32ContextValue {
   isConnected: boolean;
   logs: Esp32LogEntry[];
   authStatus: AuthStatus;
+  authStatusRef: MutableRefObject<AuthStatus>;  // Ref for polling (avoids stale closure)
   sendToESP32: (message: string) => void;
+  setSendFn: (fn: ((message: string) => void) | null) => void;  // For hook to register send function
   setConnected: (connected: boolean) => void;
   addLog: (direction: 'in' | 'out', message: string) => void;
   clearLogs: () => void;
@@ -29,6 +31,10 @@ export function Esp32Provider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState(false);
   const [logs, setLogs] = useState<Esp32LogEntry[]>([]);
   const [authStatus, setAuthStatusState] = useState<AuthStatus>('idle');
+  
+  // Ref that stays in sync with state - allows polling to read current value
+  // without stale closure issues
+  const authStatusRef = useRef<AuthStatus>('idle');
   
   const sendFnRef = useRef<((message: string) => void) | null>(null);
 
@@ -50,7 +56,8 @@ export function Esp32Provider({ children }: { children: ReactNode }) {
   }, []);
 
   const setAuthStatus = useCallback((status: AuthStatus) => {
-    setAuthStatusState(status);
+    authStatusRef.current = status;  // Update ref immediately (synchronous)
+    setAuthStatusState(status);      // Update state for UI re-renders
     if (status !== 'idle') {
       addLog('in', status === 'pending' ? '⏳ AUTH PENDING' : 
                      status === 'success' ? '✓ AUTH SUCCESS' : 
@@ -59,6 +66,7 @@ export function Esp32Provider({ children }: { children: ReactNode }) {
   }, [addLog]);
 
   const clearAuthStatus = useCallback(() => {
+    authStatusRef.current = 'idle';
     setAuthStatusState('idle');
   }, []);
 
@@ -76,7 +84,9 @@ export function Esp32Provider({ children }: { children: ReactNode }) {
     isConnected,
     logs,
     authStatus,
+    authStatusRef,
     sendToESP32,
+    setSendFn,
     setConnected: setIsConnected,
     addLog,
     clearLogs,

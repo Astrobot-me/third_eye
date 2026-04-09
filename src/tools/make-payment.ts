@@ -4,12 +4,13 @@ import { parseUpiQr, generateUpiDeepLink, UpiQrData } from "../lib/upi-qr-parser
 import { tts } from "../lib/tts-feedback";
 import { OverlayState } from "../components/qr-scanner-overlay/QrScannerOverlay";
 import { paymentHistory } from "../lib/payment-history-store";
+import { AuthStatus } from "../contexts/Esp32Context";
 
 interface Esp32Deps {
   isConnected: boolean;
   sendToESP32: (message: string) => void;
-  authStatus: 'idle' | 'pending' | 'success' | 'failed';
-  setAuthStatus: (status: 'idle' | 'pending' | 'success' | 'failed') => void;
+  getAuthStatus: () => AuthStatus;  // Getter to avoid stale closure
+  setAuthStatus: (status: AuthStatus) => void;
   clearAuthStatus: () => void;
 }
 
@@ -191,6 +192,7 @@ export function createMakePaymentHandler(
         // Reset and set pending auth status
         esp32Deps.clearAuthStatus();
         esp32Deps.setAuthStatus('pending');
+        console.log("Asking for Authentication")
         esp32Deps.sendToESP32("ASK_AUTH_VERIFY");
 
         // Show authenticating overlay with cancel
@@ -209,14 +211,14 @@ export function createMakePaymentHandler(
             onCancel: cancelHandler 
           });
 
-          // Poll for auth status changes
+          // Poll for auth status changes (using getter to avoid stale closure)
           const pollInterval = setInterval(() => {
             if (authCancelled || authResolved) {
               clearInterval(pollInterval);
               return;
             }
 
-            const status = esp32Deps.authStatus;
+            const status = esp32Deps.getAuthStatus();
             if (status === 'success') {
               authResolved = true;
               clearInterval(pollInterval);

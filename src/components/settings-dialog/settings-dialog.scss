@@ -172,4 +172,46 @@
       outline: none;
     }
   }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--outline-variant);
+    margin-bottom: var(--space-md);
+
+    .theme-label {
+      font-family: var(--font-mono);
+      font-size: var(--body-sm);
+      color: var(--on-surface-variant);
+    }
+
+    .theme-switch {
+      display: flex;
+      background: var(--surface-container-highest);
+      border-radius: var(--radius-md);
+      padding: 2px;
+      gap: 2px;
+
+      .theme-option {
+        padding: var(--space-xs) var(--space-sm);
+        font-family: var(--font-mono);
+        font-size: var(--label-sm);
+        color: var(--on-surface-dim);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.active {
+          background: var(--primary);
+          color: var(--on-primary);
+        }
+
+        &:not(.active):hover {
+          color: var(--on-surface);
+        }
+      }
+    }
+  }
 }
