@@ -108,6 +108,12 @@ Over **2.2 billion people** worldwide, including **34 million+ in India**, live 
   <img src="readme/workflow.svg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
 </p>
 
+## ⚙️ High Level Overview
+
+<p align="center">
+  <img src="readme/workflow.jpg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
+</p>
+
 1. The user presses a button on the glasses to choose a mode.
 2. The ESP32 camera streams frames, and the mic streams audio to the web app.
 3. **Active:** YOLOv8 detects objects, and Gemini turns the detections into short spoken safety cues.
