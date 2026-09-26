@@ -30,11 +30,11 @@
 
 <!-- PROMO PLACEHOLDER: upload the promo to readme/ and update this link if the filename changes -->
 <p align="center">
-  <a href="readme/Third%20Eye%20Promo.mp4">
-    <img src="readme/hardware.jpg" alt="Third Eye Promo" width="720" />
-  </a>
-  <br />
-  <a href="readme/Third%20Eye%20Promo.mp4">▶ Watch the promo video</a>
+  
+
+https://github.com/user-attachments/assets/7b9b2220-8318-4f09-818e-c5570719d97b
+
+
 </p>
 
 ---
