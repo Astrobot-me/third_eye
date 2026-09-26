@@ -1,133 +1,246 @@
-# Live API - Web Console
+<div align="center">
 
-This repository contains a react-based starter app for using the [Live API](<[https://ai.google.dev/gemini-api](https://ai.google.dev/api/multimodal-live)>) over a websocket. It provides modules for streaming audio playback, recording user media such as from a microphone, webcam or screen capture as well as a unified log view to aid in development of your application.
+<img src="readme/product.jpg" alt="Third Eye smart glasses" width="260" />
 
-[![Live API Demo](readme/thumbnail.png)](https://www.youtube.com/watch?v=J_q7JY1XxFE)
+# Third Eye
 
-Watch the demo of the Live API [here](https://www.youtube.com/watch?v=J_q7JY1XxFE).
+### AI-Powered Smart Glasses for Assisted Vision
 
-## Usage
+*See. Hear. Understand. Respond. Be independent.*
 
-To get started, [create a free Gemini API key](https://aistudio.google.com/apikey) and add it to the `.env` file. Then:
+**Team Tech Fungus · Roorkee Institute of Technology, Roorkee**
+
+</div>
+
+---
+
+## 🎬 Videos
+
+### Demo
+
+<p align="center">
+  <a href="https://youtu.be/cIXQx1PoyvY?feature=shared">
+    <img src="https://img.youtube.com/vi/cIXQx1PoyvY/maxresdefault.jpg" alt="Third Eye Demo" width="720" />
+  </a>
+  <br />
+  <a href="https://youtu.be/cIXQx1PoyvY?feature=shared">▶ Watch the demo on YouTube</a>
+</p>
+
+### Promo
+
+<!-- PROMO PLACEHOLDER: upload the promo to readme/ and update this link if the filename changes -->
+<p align="center">
+  
+
+https://github.com/user-attachments/assets/7b9b2220-8318-4f09-818e-c5570719d97b
+
+
+</p>
+
+---
+
+## 🧭 About the Project
+
+Over **2.2 billion people** worldwide, including **34 million+ in India**, live with some form of vision impairment. The tools available to them are often outdated, expensive and fragmented. Simple everyday moments like crossing a road, reading a signboard or paying at a shop can become dangerous or dependent on someone else.
+
+**Third Eye** is an affordable, AI-powered wearable that gives visually impaired and elderly users real-time awareness of their surroundings. It combines computer vision, a conversational voice assistant and secure UPI payments in one pair of glasses, all **hands-free and voice-first**.
+
+<p align="center">
+  <img src="readme/problem.jpg" alt="Real-world incidents faced by visually impaired people" width="720" />
+</p>
+
+---
+
+## ✨ Features: Three Modes, One Device
+
+| Mode | What it does |
+| --- | --- |
+| 🛡️ **Active Mode** | Continuously scans surroundings with **YOLOv8** and gives instant audio alerts for vehicles, people, obstacles and hazards, including direction and approximate distance. |
+| 💬 **Passive Mode** | On-demand assistant. Ask *"What's in front of me?"* or *"Read this sign"*. **OCR + Gemini** give a natural spoken answer. |
+| 💳 **Payment Mode** | Scans a **UPI QR code**, confirms the amount by voice and verifies with **fingerprint authentication**. No screen needed. |
+| 📴 **Offline Mode** | Local YOLOv8 detection server keeps safety alerts working without internet. |
+
+**Why it's different**
+
+- First-of-its-kind system combining navigation, AI interaction and secure UPI payments in a single wearable
+- Context-aware guidance: *"vehicle approaching on your left"*, not just *"object detected"*
+- Built for complete independence, from safe movement to cashless transactions without assistance
+- About **₹10,000** per unit, a fraction of the cost of existing assistive devices
+
+<p align="center">
+  <img src="readme/features.jpg" alt="Third Eye features" width="420" />
+  <img src="readme/payment_flow.jpg" alt="Voice-first payment flow" width="520" />
+</p>
+
+---
+
+## 🔧 Hardware
+
+<p align="center">
+  <img src="readme/proto.jpeg" alt="Third Eye working prototype" width="400" />
+</p>
+
+<div align="center">
+<table width="100%">
+  <thead>
+    <tr>
+      <th align="center" width="40%">Component</th>
+      <th align="center" width="60%">Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td align="center">Camera (ESP32-CAM)</td><td align="center">Live video feed for detection, OCR and QR scanning</td></tr>
+    <tr><td align="center">ESP32 controller</td><td align="center">Sensor handling and Wi-Fi / WebSocket communication</td></tr>
+    <tr><td align="center">ToF sensor</td><td align="center">Real-time distance measurement</td></tr>
+    <tr><td align="center">Fingerprint sensor</td><td align="center">Biometric authentication for payments</td></tr>
+    <tr><td align="center">Touch / button control</td><td align="center">Mode switching</td></tr>
+    <tr><td align="center">Speaker / audio feedback</td><td align="center">Spoken alerts and responses</td></tr>
+    <tr><td align="center">Li-Po battery module</td><td align="center">Portable power and charging</td></tr>
+  </tbody>
+</table>
+</div>
+
+---
+
+## ⚙️ How It Works
+
+<p align="center">
+  <img src="readme/workflow.svg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
+</p>
+
+1. The user presses a button on the glasses to choose a mode.
+2. The ESP32 camera streams frames, and the mic streams audio to the web app.
+3. **Active:** YOLOv8 detects objects, and Gemini turns the detections into short spoken safety cues.
+4. **Passive:** the user speaks a question, and Gemini Live answers in real time using what the camera sees.
+5. **Payment:** a QR code is scanned, the UPI ID is extracted, the amount is confirmed by voice, the fingerprint is verified and the payment is initiated.
+
+---
+
+## 🖥️ Internal Dashboard & Prototype
+
+<p align="center">
+  <img src="readme/dashboard.jpg" alt="Third Eye internal dashboard" width="760" />
+</p>
+
+<p align="center">
+  <img src="readme/build1.jpg" alt="Prototype build" width="190" />
+  <img src="readme/build2.jpg" alt="Prototype build" width="190" />
+  <img src="readme/build3.jpg" alt="Prototype electronics" width="190" />
+  <img src="readme/build4.jpg" alt="Prototype glasses" width="190" />
+</p>
+
+---
+
+## 🧰 Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Frontend | TypeScript, React, SASS, Zustand |
+| AI (live) | Google Gen AI SDK: `gemini-3.1-flash-live-preview` / `gemini-2.5-flash-native-audio-preview-12-2025` |
+| AI (polled) | `gpt-oss-20b` (alternatively `google/gemma-4-26b`) |
+| Vision | YOLOv8 (Ultralytics), OCR, `qr-scanner` |
+| Offline server | Python, FastAPI, OpenCV, Ultralytics |
+| Payment server | Node.js, Express (UPI deep links + transaction verification) |
+| Hardware | ESP32 / ESP32-CAM, fingerprint sensor, ToF sensor (Arduino sketches) |
+| Database | MongoDB (user state) |
+
+---
+
+## 📁 Repository Structure
 
 ```
-$ npm install && npm start
+third_eye/
+├── src/            # React + TypeScript web app (Gemini Live client, modes, UI)
+├── server/         # Express UPI payment server (port 3001)
+├── offline_mode/   # FastAPI + YOLOv8 offline detection server (port 8765)
+├── esp32/          # ESP32 sketches: camera, buttons, fingerprint auth
+├── public/         # Static assets
+└── readme/         # README images and videos
 ```
 
-We have provided several example applications on other branches of this repository:
+---
 
-New demos with GenAI SDK:
+## 🚀 Getting Started
 
-- [demos/proactive-audio](https://github.com/google-gemini/multimodal-live-api-web-console/tree/demos/proactive-audio) - demonstrates the Live API's [proactive audio feature](https://ai.google.dev/gemini-api/docs/live-guide#proactive-audio)
+### 1. Web app
 
-
-Original demos:
-
-- [demos/GenExplainer](https://github.com/google-gemini/multimodal-live-api-web-console/tree/demos/genexplainer)
-- [demos/GenWeather](https://github.com/google-gemini/multimodal-live-api-web-console/tree/demos/genweather)
-- [demos/GenList](https://github.com/google-gemini/multimodal-live-api-web-console/tree/demos/genlist)
-
-## Example
-
-Below is an example of an entire application that will use Google Search grounding and then render graphs using [vega-embed](https://github.com/vega/vega-embed):
-
-```typescript
-import { type FunctionDeclaration, SchemaType } from "@google/generative-ai";
-import { useEffect, useRef, useState, memo } from "react";
-import vegaEmbed from "vega-embed";
-import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
-
-export const declaration: FunctionDeclaration = {
-  name: "render_altair",
-  description: "Displays an altair graph in json format.",
-  parameters: {
-    type: SchemaType.OBJECT,
-    properties: {
-      json_graph: {
-        type: SchemaType.STRING,
-        description:
-          "JSON STRING representation of the graph to render. Must be a string, not a json object",
-      },
-    },
-    required: ["json_graph"],
-  },
-};
-
-export function Altair() {
-  const [jsonString, setJSONString] = useState<string>("");
-  const { client, setConfig } = useLiveAPIContext();
-
-  useEffect(() => {
-    setConfig({
-      model: "models/gemini-2.0-flash-exp",
-      systemInstruction: {
-        parts: [
-          {
-            text: 'You are my helpful assistant. Any time I ask you for a graph call the "render_altair" function I have provided you. Dont ask for additional information just make your best judgement.',
-          },
-        ],
-      },
-      tools: [{ googleSearch: {} }, { functionDeclarations: [declaration] }],
-    });
-  }, [setConfig]);
-
-  useEffect(() => {
-    const onToolCall = (toolCall: ToolCall) => {
-      console.log(`got toolcall`, toolCall);
-      const fc = toolCall.functionCalls.find(
-        (fc) => fc.name === declaration.name
-      );
-      if (fc) {
-        const str = (fc.args as any).json_graph;
-        setJSONString(str);
-      }
-    };
-    client.on("toolcall", onToolCall);
-    return () => {
-      client.off("toolcall", onToolCall);
-    };
-  }, [client]);
-
-  const embedRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (embedRef.current && jsonString) {
-      vegaEmbed(embedRef.current, JSON.parse(jsonString));
-    }
-  }, [embedRef, jsonString]);
-  return <div className="vega-embed" ref={embedRef} />;
-}
+```bash
+npm install
 ```
 
-## development
+Create a `.env` file in the project root:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-Project consists of:
+```env
+REACT_APP_GEMINI_API_KEY=your_gemini_api_key   # https://aistudio.google.com/apikey
+REACT_APP_ESP32_IP=192.168.x.x:81              # IP of your ESP32 camera
+```
 
-- an Event-emitting websocket-client to ease communication between the websocket and the front-end
-- communication layer for processing audio in and out
-- a boilerplate view for starting to build your apps and view logs
+```bash
+npm start          # http://localhost:3000
+```
 
-## Available Scripts
+### 2. Payment server
 
-In the project directory, you can run:
+```bash
+npm install express cors
+node server/index.js   # http://localhost:3001
+```
 
-### `npm start`
+Endpoints: `POST /api/initiate-payment`, `POST /api/verify-payment`, `GET /api/transaction/:id`, `GET /api/transactions`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 3. Offline detection server (optional)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+cd offline_mode
+pip install fastapi uvicorn ultralytics opencv-python pydantic pywin32
+python server.py       # http://localhost:8765  (POST /detect, GET /health)
+```
 
-### `npm run build`
+### 4. ESP32 firmware
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Flash the sketches in `esp32/` with the Arduino IDE:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- `espcodev2.ino`: camera streaming
+- `button_controller.ino`: mode buttons
+- `espcode_fingerprint.ino`: fingerprint authentication over WebSocket
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-_This is an experiment showcasing the Live API, not an official Google product. We’ll do our best to support and maintain this experiment but your mileage may vary. We encourage open sourcing projects as a way of learning from each other. Please respect our and other creators' rights, including copyright and trademark rights when present, when sharing these works and creating derivative work. If you want more info on Google's policy, you can find that [here](https://developers.google.com/terms/site-policies)._
+## 📊 Market & Impact
+
+<p align="center">
+  <img src="readme/comparison.jpg" alt="Competitive comparison" width="560" />
+</p>
+
+- **Target market:** ~35M visually impaired people in India, ~2.2B globally
+- **Unit economics:** ~₹6,000 cost, ₹10,000 selling price (~40% gross margin)
+- **Business model:** direct sales (B2C), B2B / B2G partnerships, premium subscription, maintenance & support
+
+<p align="center">
+  <img src="readme/impact.jpg" alt="Impact: safety, dignity, autonomy" width="640" />
+</p>
+
+### Roadmap
+
+- Compact all-in-one glasses (camera, ESP32, battery, mic and speaker in the frame)
+- GPS and indoor navigation (malls, hospitals, airports)
+- Full smartphone control by voice
+- Personalized AI that adapts to user habits
+- On-device edge AI for fully offline use
+
+---
+
+## 👥 Team Tech Fungus
+
+<p align="center">
+  <img src="readme/team.jpeg" alt="Team Tech Fungus" width="640" />
+</p>
+
+| Name | LinkedIn |
+| --- | --- |
+| Aditya Raj | [LinkedIn](https://www.linkedin.com/in/your-profile) |
+| Ashwani Raj | [LinkedIn](https://www.linkedin.com/in/your-profile) |
+| Harsh Raj Shukla | [LinkedIn](https://www.linkedin.com/in/your-profile) |
+| Priyanshu Roushan | [LinkedIn](https://www.linkedin.com/in/your-profile) |
+| Anamika | [LinkedIn](https://www.linkedin.com/in/your-profile) |
+| Mansi | [LinkedIn](https://www.linkedin.com/in/your-profile) |
