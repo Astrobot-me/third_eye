@@ -108,7 +108,7 @@ Over **2.2 billion people** worldwide, including **34 million+ in India**, live 
   <img src="readme/workflow.svg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
 </p>
 
-## ⚙️ High Level Overview
+## ⚙️ High Level Code Overview
 
 <p align="center">
   <img src="readme/workflow.jpg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
