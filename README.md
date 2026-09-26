@@ -89,8 +89,8 @@ Over **2.2 billion people** worldwide, including **34 million+ in India**, live 
     </tr>
   </thead>
   <tbody>
-    <tr><td align="center">Camera (ESP32-CAM)</td><td align="center">Live video feed for detection, OCR and QR scanning</td></tr>
-    <tr><td align="center">ESP32 controller</td><td align="center">Sensor handling and Wi-Fi / WebSocket communication</td></tr>
+    <tr><td align="center">Camera</td><td align="center">Streams live video directly to the web app for detection, OCR and QR scanning</td></tr>
+    <tr><td align="center">ESP32 controller</td><td align="center">Sends button presses, mode commands, sensor and fingerprint states over WebSocket</td></tr>
     <tr><td align="center">ToF sensor</td><td align="center">Real-time distance measurement</td></tr>
     <tr><td align="center">Fingerprint sensor</td><td align="center">Biometric authentication for payments</td></tr>
     <tr><td align="center">Touch / button control</td><td align="center">Mode switching</td></tr>
@@ -102,23 +102,33 @@ Over **2.2 billion people** worldwide, including **34 million+ in India**, live 
 
 ---
 
-## ⚙️ How It Works
+## ⚙️ How It Works [ Architecture ]
 
 <p align="center">
-  <img src="readme/workflow.svg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
+  <img src="readme/workflow.svg" alt="How Third Eye works: camera and mic stream directly to the web app, ESP32 sends states over WebSocket, Gemini in the cloud with a local offline fallback, three modes, audio back to the user" width="100%" />
 </p>
 
-## ⚙️ High Level Code Overview
+## ⚙️ User Flow
 
 <p align="center">
   <img src="readme/workflow.jpg" alt="How Third Eye works: glasses to ESP32 to web app, then Active, Passive and Payment modes, back to the user as audio" width="100%" />
 </p>
 
+
+## ⚙️ Roadmap to build 
+
+<p align="center">
+  <img src="readme/roadmap.svg" alt="expected items to build " width="100%" />
+</p>
+
+---
+
 1. The user presses a button on the glasses to choose a mode.
-2. The ESP32 camera streams frames, and the mic streams audio to the web app.
-3. **Active:** YOLOv8 detects objects, and Gemini turns the detections into short spoken safety cues.
-4. **Passive:** the user speaks a question, and Gemini Live answers in real time using what the camera sees.
-5. **Payment:** a QR code is scanned, the UPI ID is extracted, the amount is confirmed by voice, the fingerprint is verified and the payment is initiated.
+2. The camera and mic stream directly to the TypeScript + React web app for near real-time latency. The ESP32 sends button presses, mode commands, sensor and fingerprint states over WebSocket.
+3. The web app sends the relevant data to **Gemini in the cloud** for interpretation. Without internet, a **local offline model** takes over as the fallback.
+4. **Active:** objects are detected and turned into short spoken safety cues.
+5. **Passive:** the user speaks a question, and Gemini Live answers in real time using what the camera sees.
+6. **Payment:** a QR code is scanned, the UPI ID is extracted, the amount is confirmed by voice, the fingerprint is verified through the ESP32 and the payment is initiated.
 
 ---
 

@@ -1,95 +1,113 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="940" viewBox="0 0 1600 940"><defs><marker id="ac" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#33d6ff"/></marker><marker id="am" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ff4fd8"/></marker><marker id="ay" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffd23f"/></marker><marker id="as" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9aa3c0"/></marker><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4ade80"/></marker></defs><rect width="1600" height="940" rx="24" fill="#0b0f1e"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="800.0" y="52.0">How Third Eye Works</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="800.0" y="90.0">One wearable · three modes · hands-free, voice-first</tspan></text>
-<rect x="40" y="130" width="250" height="640" rx="14" fill="#141a2e" stroke="#33d6ff" stroke-width="2"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="165.0" y="166.0">Smart Glasses</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="165.0" y="192.0">INPUT HARDWARE</tspan></text>
-<rect x="58" y="235" width="214" height="70" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
-<circle cx="84" cy="270" r="8" fill="#33d6ff"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="260.0">Camera</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="283.0">live video frames</tspan></text>
-<rect x="58" y="323" width="214" height="70" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
-<circle cx="84" cy="358" r="8" fill="#ff4fd8"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="348.0">Microphone</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="371.0">voice commands</tspan></text>
-<rect x="58" y="411" width="214" height="70" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
-<circle cx="84" cy="446" r="8" fill="#ffd23f"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="436.0">ToF Sensor</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="459.0">distance to obstacles</tspan></text>
-<rect x="58" y="499" width="214" height="70" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
-<circle cx="84" cy="534" r="8" fill="#33d6ff"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="524.0">Mode Buttons</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="547.0">Active / Passive / Pay</tspan></text>
-<rect x="58" y="587" width="214" height="70" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
-<circle cx="84" cy="622" r="8" fill="#4ade80"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="612.0">Fingerprint</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="635.0">payment approval</tspan></text>
-<rect x="58" y="675" width="214" height="70" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
-<circle cx="84" cy="710" r="8" fill="#ff4fd8"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="700.0">Speaker</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="104" y="723.0">audio feedback</tspan></text>
-<rect x="350" y="210" width="260" height="150" rx="14" fill="#141a2e" stroke="#4ade80" stroke-width="2"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="480.0" y="245.0">ESP32 Controller</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="480.0" y="281.8">Streams camera, audio &amp;</tspan><tspan x="480.0" y="300.0">sensor data over</tspan><tspan x="480.0" y="318.2">Wi-Fi / WebSocket</tspan></text>
-<rect x="350" y="440" width="260" height="190" rx="14" fill="#141a2e" stroke="#33d6ff" stroke-width="2"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="480.0" y="475.0">Third Eye Web App</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="480.0" y="500.0">React + Google Gen AI SDK</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="480.0" y="551.8">Routes each input to the</tspan><tspan x="480.0" y="570.0">selected mode and speaks</tspan><tspan x="480.0" y="588.2">results back to the user</tspan></text>
-<path d="M 290 285 L 344 285" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ag)"/>
-<path d="M 480.0 360 L 480.0 432" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ag)"/>
-<rect x="670" y="130" width="890" height="200" rx="14" fill="#10162a" stroke="#33d6ff" stroke-width="2"/>
-<rect x="686" y="146" width="132" height="168" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="752" y="216.0">ACTIVE</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="752" y="244.0">Real-time safety</tspan></text>
-<rect x="846" y="164" width="160" height="104" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="926.0" y="206.9">Camera frame</tspan><tspan x="926.0" y="225.1">+ ToF distance</tspan></text>
-<path d="M 1008 216.0 L 1024 216.0" fill="none" stroke="#33d6ff" stroke-width="2" marker-end="url(#ac)"/>
-<rect x="1028" y="164" width="160" height="104" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1108.0" y="206.9">YOLOv8 object</tspan><tspan x="1108.0" y="225.1">detection</tspan></text>
-<path d="M 1190 216.0 L 1206 216.0" fill="none" stroke="#33d6ff" stroke-width="2" marker-end="url(#ac)"/>
-<rect x="1210" y="164" width="160" height="104" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1290.0" y="206.9">Gemini scene</tspan><tspan x="1290.0" y="225.1">reasoning</tspan></text>
-<path d="M 1372 216.0 L 1388 216.0" fill="none" stroke="#33d6ff" stroke-width="2" marker-end="url(#ac)"/>
-<rect x="1392" y="164" width="160" height="104" rx="12" fill="#33d6ff" stroke="#33d6ff" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0b0f1e" text-anchor="middle" dominant-baseline="middle"><tspan x="1472.0" y="206.9">“Vehicle approaching</tspan><tspan x="1472.0" y="225.1">on your left”</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#33d6ff" text-anchor="start" dominant-baseline="middle"><tspan x="846" y="300.0">Works offline with the local YOLOv8 server</tspan></text>
-<path d="M 610 535 C 650 535, 630 230.0, 664 230.0" fill="none" stroke="#33d6ff" stroke-width="2.2" marker-end="url(#ac)"/>
-<rect x="670" y="350" width="890" height="200" rx="14" fill="#10162a" stroke="#ff4fd8" stroke-width="2"/>
-<rect x="686" y="366" width="132" height="168" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#ff4fd8" text-anchor="middle" dominant-baseline="middle"><tspan x="752" y="436.0">PASSIVE</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="752" y="464.0">Ask anything</tspan></text>
-<rect x="846" y="384" width="160" height="104" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="926.0" y="426.9">User asks:</tspan><tspan x="926.0" y="445.1">“Read this sign”</tspan></text>
-<path d="M 1008 436.0 L 1024 436.0" fill="none" stroke="#ff4fd8" stroke-width="2" marker-end="url(#am)"/>
-<rect x="1028" y="384" width="160" height="104" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1108.0" y="426.9">Voice + frame to</tspan><tspan x="1108.0" y="445.1">Gemini Live</tspan></text>
-<path d="M 1190 436.0 L 1206 436.0" fill="none" stroke="#ff4fd8" stroke-width="2" marker-end="url(#am)"/>
-<rect x="1210" y="384" width="160" height="104" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1290.0" y="426.9">OCR + scene</tspan><tspan x="1290.0" y="445.1">understanding</tspan></text>
-<path d="M 1372 436.0 L 1388 436.0" fill="none" stroke="#ff4fd8" stroke-width="2" marker-end="url(#am)"/>
-<rect x="1392" y="384" width="160" height="104" rx="12" fill="#ff4fd8" stroke="#ff4fd8" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0b0f1e" text-anchor="middle" dominant-baseline="middle"><tspan x="1472.0" y="426.9">Natural spoken</tspan><tspan x="1472.0" y="445.1">answer</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#ff4fd8" text-anchor="start" dominant-baseline="middle"><tspan x="846" y="520.0">Multi-turn conversation in real time</tspan></text>
-<path d="M 610 535 C 650 535, 630 450.0, 664 450.0" fill="none" stroke="#ff4fd8" stroke-width="2.2" marker-end="url(#am)"/>
-<rect x="670" y="570" width="890" height="200" rx="14" fill="#10162a" stroke="#ffd23f" stroke-width="2"/>
-<rect x="686" y="586" width="132" height="168" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="800" fill="#ffd23f" text-anchor="middle" dominant-baseline="middle"><tspan x="752" y="656.0">PAYMENT</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="752" y="684.0">Scan · speak · pay</tspan></text>
-<rect x="846" y="604" width="160" height="104" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="926.0" y="646.9">Scan UPI</tspan><tspan x="926.0" y="665.1">QR code</tspan></text>
-<path d="M 1008 656.0 L 1024 656.0" fill="none" stroke="#ffd23f" stroke-width="2" marker-end="url(#ay)"/>
-<rect x="1028" y="604" width="160" height="104" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1108.0" y="646.9">Voice-confirm</tspan><tspan x="1108.0" y="665.1">payee &amp; amount</tspan></text>
-<path d="M 1190 656.0 L 1206 656.0" fill="none" stroke="#ffd23f" stroke-width="2" marker-end="url(#ay)"/>
-<rect x="1210" y="604" width="160" height="104" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1290.0" y="646.9">Fingerprint</tspan><tspan x="1290.0" y="665.1">verification</tspan></text>
-<path d="M 1372 656.0 L 1388 656.0" fill="none" stroke="#ffd23f" stroke-width="2" marker-end="url(#ay)"/>
-<rect x="1392" y="604" width="160" height="104" rx="12" fill="#ffd23f" stroke="#ffd23f" stroke-width="1.5"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#0b0f1e" text-anchor="middle" dominant-baseline="middle"><tspan x="1472.0" y="646.9">UPI payment</tspan><tspan x="1472.0" y="665.1">initiated ✓</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#ffd23f" text-anchor="start" dominant-baseline="middle"><tspan x="846" y="740.0">No screen needed · biometric secured</tspan></text>
-<path d="M 610 535 C 650 535, 630 670.0, 664 670.0" fill="none" stroke="#ffd23f" stroke-width="2.2" marker-end="url(#ay)"/>
-<rect x="350" y="820" width="1210" height="80" rx="14" fill="#1b2340" stroke="#ff4fd8" stroke-width="2"/>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="955.0" y="850.0">Audio Feedback → User</tspan></text>
-<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="955.0" y="876.0">Alerts, answers and payment confirmations are spoken through the glasses' speaker</tspan></text>
-<path d="M 1115.0 770 L 1115.0 814" fill="none" stroke="#ff4fd8" stroke-width="2.5" marker-end="url(#am)"/>
-<path d="M 350 860 L 165.0 860 L 165.0 776" fill="none" stroke="#ff4fd8" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#am)"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="1000" viewBox="0 0 1640 1000"><defs><marker id="ac" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#33d6ff"/></marker><marker id="am" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ff4fd8"/></marker><marker id="ay" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffd23f"/></marker><marker id="as" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9aa3c0"/></marker><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4ade80"/></marker><marker id="ao" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ff9f43"/></marker></defs><rect width="1640" height="1000" rx="24" fill="#0b0f1e"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="820.0" y="52.0">How Third Eye Works</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="820.0" y="90.0">One wearable · three modes · hands-free, voice-first</tspan></text>
+<rect x="40" y="130" width="260" height="690" rx="14" fill="#141a2e" stroke="#33d6ff" stroke-width="2"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="170.0" y="164.0">Smart Glasses</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="170.0" y="188.0">ON THE USER</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#33d6ff" text-anchor="start" dominant-baseline="middle"><tspan x="60" y="222.0">DIRECT STREAM</tspan></text>
+<rect x="56" y="236" width="228" height="62" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
+<circle cx="80" cy="267" r="7" fill="#33d6ff"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="98" y="257.0">Camera</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="98" y="279.0">live video frames</tspan></text>
+<rect x="56" y="308" width="228" height="62" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
+<circle cx="80" cy="339" r="7" fill="#ff4fd8"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="98" y="329.0">Microphone</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="98" y="351.0">voice commands</tspan></text>
+<rect x="52" y="402" width="236" height="330" rx="12" fill="#10162a" stroke="#4ade80" stroke-width="2"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="170.0" y="430.0">ESP32 Controller</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#4ade80" text-anchor="middle" dominant-baseline="middle"><tspan x="170.0" y="452.0">SENDS STATES OVER WEBSOCKET</tspan></text>
+<rect x="64" y="472" width="212" height="62" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
+<circle cx="88" cy="503" r="7" fill="#ffd23f"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="106" y="493.0">Mode Buttons</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="106" y="515.0">Active / Passive / Pay</tspan></text>
+<rect x="64" y="544" width="212" height="62" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
+<circle cx="88" cy="575" r="7" fill="#ff9f43"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="106" y="565.0">Distance Sensor</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="106" y="587.0">obstacle distance</tspan></text>
+<rect x="64" y="616" width="212" height="62" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
+<circle cx="88" cy="647" r="7" fill="#4ade80"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="106" y="637.0">Fingerprint</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="106" y="659.0">payment approval</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="170.0" y="706.0">button presses · mode cmds · auth</tspan></text>
+<rect x="56" y="742" width="228" height="62" rx="10" fill="#1b2340" stroke="#2a3354" stroke-width="1.5"/>
+<circle cx="80" cy="773" r="7" fill="#ff4fd8"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#eef1fb" text-anchor="start" dominant-baseline="middle"><tspan x="98" y="763.0">Speaker</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="start" dominant-baseline="middle"><tspan x="98" y="785.0">audio feedback</tspan></text>
+<rect x="420" y="130" width="270" height="300" rx="14" fill="#141a2e" stroke="#33d6ff" stroke-width="2"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="168.0">Third Eye Web App</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="194.0">TypeScript + React</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="272.7">Receives live video &amp;</tspan><tspan x="555.0" y="290.9">audio + WebSocket states,</tspan><tspan x="555.0" y="309.1">picks the mode and</tspan><tspan x="555.0" y="327.3">speaks results back</tspan></text>
+<path d="M 300 300 L 414 300" fill="none" stroke="#33d6ff" stroke-width="3" marker-end="url(#ac)"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="360.0" y="272.0">Live video + audio</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="360.0" y="328.0">direct · low latency</tspan></text>
+<path d="M 288 567 L 360.0 567 L 380.0 395 L 414 395" fill="none" stroke="#4ade80" stroke-width="2.5" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#4ade80" text-anchor="middle" dominant-baseline="middle"><tspan x="358.0" y="592.0">WebSocket</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="358.0" y="612.0">near real-time</tspan></text>
+<rect x="420" y="500" width="270" height="320" rx="14" fill="#141a2e" stroke="#ff9f43" stroke-width="2"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="532.0">AI Interpretation</tspan></text>
+<rect x="436" y="558" width="238" height="100" rx="10" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="584.0">Gemini Live · Cloud</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="610.0">PRIMARY</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="634.0">vision, voice &amp; reasoning</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#ff9f43" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="684.0">no internet? ↓</tspan></text>
+<rect x="436" y="706" width="238" height="100" rx="10" fill="#1b2340" stroke="#ff9f43" stroke-width="1.5" stroke-dasharray="8 6"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="732.0">Local Model · Offline</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ff9f43" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="758.0">FALLBACK</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="555.0" y="782.0">YOLOv8 + local interpretation</tspan></text>
+<path d="M 555.0 436 L 555.0 494" fill="none" stroke="#ff9f43" stroke-width="2.5" marker-start="url(#ao)" marker-end="url(#ao)"/>
+<rect x="750" y="130" width="850" height="210" rx="14" fill="#10162a" stroke="#33d6ff" stroke-width="2"/>
+<rect x="764" y="144" width="126" height="182" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="800" fill="#33d6ff" text-anchor="middle" dominant-baseline="middle"><tspan x="827" y="221.0">ACTIVE</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="500" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="827" y="249.0">Be my eyes</tspan></text>
+<rect x="912" y="164" width="154" height="108" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="989.0" y="209.2">Camera frame</tspan><tspan x="989.0" y="226.8">+ distance</tspan></text>
+<path d="M 1068 218.0 L 1082 218.0" fill="none" stroke="#33d6ff" stroke-width="2" marker-end="url(#ac)"/>
+<rect x="1086" y="164" width="154" height="108" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1163.0" y="209.2">Object</tspan><tspan x="1163.0" y="226.8">detection</tspan></text>
+<path d="M 1242 218.0 L 1256 218.0" fill="none" stroke="#33d6ff" stroke-width="2" marker-end="url(#ac)"/>
+<rect x="1260" y="164" width="154" height="108" rx="12" fill="#1b2340" stroke="#33d6ff" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1337.0" y="209.2">Scene</tspan><tspan x="1337.0" y="226.8">reasoning</tspan></text>
+<path d="M 1416 218.0 L 1430 218.0" fill="none" stroke="#33d6ff" stroke-width="2" marker-end="url(#ac)"/>
+<rect x="1434" y="164" width="154" height="108" rx="12" fill="#33d6ff" stroke="#33d6ff" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#0b0f1e" text-anchor="middle" dominant-baseline="middle"><tspan x="1511.0" y="209.2">“Vehicle approaching</tspan><tspan x="1511.0" y="226.8">on your left”</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#33d6ff" text-anchor="start" dominant-baseline="middle"><tspan x="912" y="308.0">Keeps working offline via the local model</tspan></text>
+<path d="M 690 280 C 720 280, 720 235.0, 744 235.0" fill="none" stroke="#33d6ff" stroke-width="2.2" marker-end="url(#ac)"/>
+<rect x="750" y="360" width="850" height="210" rx="14" fill="#10162a" stroke="#ff4fd8" stroke-width="2"/>
+<rect x="764" y="374" width="126" height="182" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="800" fill="#ff4fd8" text-anchor="middle" dominant-baseline="middle"><tspan x="827" y="451.0">PASSIVE</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="500" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="827" y="479.0">Ask anything</tspan></text>
+<rect x="912" y="394" width="154" height="108" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="989.0" y="439.2">User asks:</tspan><tspan x="989.0" y="456.8">“Read this sign”</tspan></text>
+<path d="M 1068 448.0 L 1082 448.0" fill="none" stroke="#ff4fd8" stroke-width="2" marker-end="url(#am)"/>
+<rect x="1086" y="394" width="154" height="108" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1163.0" y="439.2">Voice + frame</tspan><tspan x="1163.0" y="456.8">to Gemini Live</tspan></text>
+<path d="M 1242 448.0 L 1256 448.0" fill="none" stroke="#ff4fd8" stroke-width="2" marker-end="url(#am)"/>
+<rect x="1260" y="394" width="154" height="108" rx="12" fill="#1b2340" stroke="#ff4fd8" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1337.0" y="439.2">OCR + scene</tspan><tspan x="1337.0" y="456.8">understanding</tspan></text>
+<path d="M 1416 448.0 L 1430 448.0" fill="none" stroke="#ff4fd8" stroke-width="2" marker-end="url(#am)"/>
+<rect x="1434" y="394" width="154" height="108" rx="12" fill="#ff4fd8" stroke="#ff4fd8" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#0b0f1e" text-anchor="middle" dominant-baseline="middle"><tspan x="1511.0" y="439.2">Natural spoken</tspan><tspan x="1511.0" y="456.8">answer</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#ff4fd8" text-anchor="start" dominant-baseline="middle"><tspan x="912" y="538.0">Multi-turn conversation in real time</tspan></text>
+<path d="M 690 280 C 720 280, 720 465.0, 744 465.0" fill="none" stroke="#ff4fd8" stroke-width="2.2" marker-end="url(#am)"/>
+<rect x="750" y="590" width="850" height="210" rx="14" fill="#10162a" stroke="#ffd23f" stroke-width="2"/>
+<rect x="764" y="604" width="126" height="182" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="800" fill="#ffd23f" text-anchor="middle" dominant-baseline="middle"><tspan x="827" y="681.0">PAYMENT</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="500" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="827" y="709.0">Scan · speak · pay</tspan></text>
+<rect x="912" y="624" width="154" height="108" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="989.0" y="669.2">Scan UPI</tspan><tspan x="989.0" y="686.8">QR code</tspan></text>
+<path d="M 1068 678.0 L 1082 678.0" fill="none" stroke="#ffd23f" stroke-width="2" marker-end="url(#ay)"/>
+<rect x="1086" y="624" width="154" height="108" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1163.0" y="669.2">Voice-confirm</tspan><tspan x="1163.0" y="686.8">payee &amp; amount</tspan></text>
+<path d="M 1242 678.0 L 1256 678.0" fill="none" stroke="#ffd23f" stroke-width="2" marker-end="url(#ay)"/>
+<rect x="1260" y="624" width="154" height="108" rx="12" fill="#1b2340" stroke="#ffd23f" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="500" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1337.0" y="669.2">Fingerprint</tspan><tspan x="1337.0" y="686.8">via ESP32</tspan></text>
+<path d="M 1416 678.0 L 1430 678.0" fill="none" stroke="#ffd23f" stroke-width="2" marker-end="url(#ay)"/>
+<rect x="1434" y="624" width="154" height="108" rx="12" fill="#ffd23f" stroke="#ffd23f" stroke-width="1.5"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="700" fill="#0b0f1e" text-anchor="middle" dominant-baseline="middle"><tspan x="1511.0" y="669.2">UPI payment</tspan><tspan x="1511.0" y="686.8">initiated ✓</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#ffd23f" text-anchor="start" dominant-baseline="middle"><tspan x="912" y="768.0">No screen needed · biometric secured</tspan></text>
+<path d="M 690 280 C 720 280, 720 695.0, 744 695.0" fill="none" stroke="#ffd23f" stroke-width="2.2" marker-end="url(#ay)"/>
+<rect x="420" y="870" width="1180" height="90" rx="14" fill="#1b2340" stroke="#ff4fd8" stroke-width="2"/>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#eef1fb" text-anchor="middle" dominant-baseline="middle"><tspan x="1010.0" y="903.0">Audio Feedback → User</tspan></text>
+<text font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#9aa3c0" text-anchor="middle" dominant-baseline="middle"><tspan x="1010.0" y="932.0">Alerts, answers and payment confirmations are spoken through the glasses' speaker</tspan></text>
+<path d="M 1175.0 800 L 1175.0 864" fill="none" stroke="#ff4fd8" stroke-width="2.5" marker-end="url(#am)"/>
+<path d="M 420 915 L 170.0 915 L 170.0 826" fill="none" stroke="#ff4fd8" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#am)"/></svg>
