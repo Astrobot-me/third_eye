@@ -251,12 +251,14 @@ Flash the sketches in `esp32/` with the Arduino IDE:
 <p align="center">
   <img src="readme/team.jpeg" alt="Team Tech Fungus" width="640" />
 </p>
+## 👥 Meet the Team
+
 
 | Name | LinkedIn |
-| --- | --- |
-| Aditya Raj | [LinkedIn](https://www.linkedin.com/in/your-profile) |
-| Ashwani Raj | [LinkedIn](https://www.linkedin.com/in/your-profile) |
-| Harsh Raj Shukla | [LinkedIn](https://www.linkedin.com/in/your-profile) |
-| Priyanshu Roushan | [LinkedIn](https://www.linkedin.com/in/your-profile) |
-| Anamika | [LinkedIn](https://www.linkedin.com/in/your-profile) |
-| Mansi | [LinkedIn](https://www.linkedin.com/in/your-profile) |
+| --- | :---: |
+| Aditya Raj | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/astro-adityaraj/) |
+| Ashwani Raj | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ashwani-raj-57480028a/) |
+| Harsh Raj Shukla | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/harshrajshukla/?skipRedirect=true) |
+| Priyanshu Roushan | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/priyanshu-roushan/) |
+| Anamika Kumari | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/anamika-kumari-62bb2b287/) |
+| Mansi Mishra | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mansi-mishra-b23430281/) |
