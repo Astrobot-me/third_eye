@@ -251,6 +251,7 @@ Flash the sketches in `esp32/` with the Arduino IDE:
 <p align="center">
   <img src="readme/team.jpeg" alt="Team Tech Fungus" width="640" />
 </p>
+
 ## 👥 Meet the Team
 
 
